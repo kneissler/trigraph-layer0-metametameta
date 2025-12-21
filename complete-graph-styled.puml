@@ -9,13 +9,13 @@ skinparam ranksep 20
 
 ' Nodes from types.sheet
 ' class: type=metaType, metaLevel=ml2
-rectangle "class" as class #FFFFCC;line.dotted
+rectangle "class" as class #FFFFCC
 
-' metaType: type=metaNType, metaLevel=ml3 (TYPE NODE - bold colored text)
-hexagon "<b><color:#000000>mt</color></b>" as metaType #E6F0FF
+' metaType: type=metaNType, metaLevel=ml3 (TYPE NODE - bold cursive colored text)
+hexagon "<b><i><color:#000000>mt</color></i></b>" as metaType #E6F0FF
 
-' metaLevelType: type=metaNType, metaLevel=ml3 (TYPE NODE - bold colored text)
-hexagon "<b><color:#000000>mlt</color></b>" as metaLevelType #E6F0FF
+' metaLevelType: type=metaNType, metaLevel=ml3 (TYPE NODE - bold cursive colored text)
+hexagon "<b><i><color:#000000>mlt</color></i></b>" as metaLevelType #E6F0FF
 
 ' metaRelation: type=metaNType, metaLevel=ml3
 rectangle "mr" as metaRelation #E6F0FF
@@ -23,26 +23,26 @@ rectangle "mr" as metaRelation #E6F0FF
 ' metaRelationSignature: type=metaNType, metaLevel=ml3
 rectangle "mrs" as metaRelationSignature #E6F0FF
 
-' metaNType: type=metaNType, metaLevel=mlN (TYPE NODE - bold colored text)
-(<b><color:#000000>mnt</color></b>) as metaNType #E6F0FF;line.dashed
+' metaNType: type=metaNType, metaLevel=mlN (TYPE NODE - bold cursive colored text)
+(<b><i><color:#000000>mnt</color></i></b>) as metaNType #E6F0FF
 
 ' Nodes from metaLevels.sheet
 ' All have type=metaLevelType, metaLevel=ml2
-rectangle "ml0" as ml0 #E6FFE6;line.dotted
-rectangle "ml1" as ml1 #E6FFE6;line.dotted
-hexagon "ml2" as ml2 #E6FFE6;line.dotted
-(ml3) as ml3 #E6FFE6;line.dotted
-(mlN) as mlN #E6FFE6;line.dotted
+rectangle "ml0" as ml0 #E6FFE6
+rectangle "ml1" as ml1 #E6FFE6
+hexagon "ml2" as ml2 #E6FFE6
+(ml3) as ml3 #E6FFE6
+(mlN) as mlN #E6FFE6
 
 ' Nodes from metaRelations.sheet (relation type nodes)
 ' All have type=metaNType, metaLevel=ml3
 ' Bold text with relation color, background=metaNType color (very light blue)
-rectangle "<b><i><color:#000000>type</color></i></b>" as type_rel #E6F0FF
-rectangle "<b><i><color:#000000>ml</color></i></b>" as metaLevel_rel #E6F0FF
-rectangle "<b><i><color:#FF8800>sig</color></i></b>" as signature_rel #E6F0FF
-hexagon "<b><i><color:#0000FF>st</color></i></b>" as sourceType_rel #E6F0FF
-hexagon "<b><i><color:#AA00FF>tt</color></i></b>" as targetType_rel #E6F0FF
-(<b><i><color:#00AA00>nml</color></i></b>) as nextMetaLevel_rel #E6F0FF
+rectangle "<b><color:#000000>type</color></b>" as type_rel #E6F0FF
+rectangle "<b><color:#000000>ml</color></b>" as metaLevel_rel #E6F0FF
+rectangle "<b><color:#FF8800>sig</color></b>" as signature_rel #E6F0FF
+hexagon "<b><color:#0000FF>st</color></b>" as sourceType_rel #E6F0FF
+hexagon "<b><color:#AA00FF>tt</color></b>" as targetType_rel #E6F0FF
+(<b><color:#00AA00>nml</color></b>) as nextMetaLevel_rel #E6F0FF
 
 ' Nodes from metaRelationSignatures.sheet (all private)
 ' All have type=metaNType, metaLevel=ml3
@@ -99,14 +99,9 @@ legend right
   | Circle | private |
   ====
   |= Type Node |= Background Color |
-  | <b><color:#000000>mnt (metaNType)</color></b> | <back:#E6F0FF>Very Light Blue</back> |
-  | <b><color:#000000>mt (metaType)</color></b> | <back:#FFFFCC>Pale Yellow</back> |
-  | <b><color:#000000>mlt (metaLevelType)</color></b> | <back:#E6FFE6>Pale Green</back> |
-  ====
-  |= Border Style |= Meta Level |
-  | Dotted | metaLevel-2 |
-  | Solid | metaLevel-3 |
-  | Dashed | metaLevel-N |
+  | <b><i><color:#0066CC>mnt</color></i></b> (metaNType) | <back:#E6F0FF>Very Light Blue</back> |
+  | <b><i><color:#CC9900>mt</color></i></b> (metaType) | <back:#FFFFCC>Pale Yellow</back> |
+  | <b><i><color:#00AA00>mlt</color></i></b> (metaLevelType) | <back:#E6FFE6>Pale Green</back> |
   ====
   |= Edge Color |= Relation Type |
   | <color:#FF8800>Orange</color> | signature |
@@ -115,12 +110,12 @@ legend right
   | <color:#00AA00>Green</color> | nextMetaLevel |
   ====
   |= Relations |
-  | <b><i><color:#000000>Black</color></i></b> | type |
-  | <b><i><color:#000000>Black</color></i></b> | metaLevel |
-  | <b><i><color:#FF8800>Orange</color></i></b> | signature |
-  | <b><i><color:#0000FF>Blue</color></i></b> | sourceType |
-  | <b><i><color:#AA00FF>Purple</color></i></b> | targetType |
-  | <b><i><color:#00AA00>Green</color></i></b> | nextMetaLevel |
+  | <b><color:#000000>type</color></b> | type |
+  | <b><color:#000000>ml</color></b> | metaLevel |
+  | <b><color:#FF8800>sig</color></b> | signature |
+  | <b><color:#0000FF>st</color></b> | sourceType |
+  | <b><color:#AA00FF>tt</color></b> | targetType |
+  | <b><color:#00AA00>nml</color></b> | nextMetaLevel |
   ====
   |= Abbreviation |= Full Name |
   | mt | metaType |
