@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.0.3">
   <diagram name="Complete MetaMeta Graph" id="graph">
-    <mxGraphModel dx="1122" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="748" dy="432" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -10,7 +10,7 @@
         <mxCell id="containerN" value="Meta Level N" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;startSize=30;" parent="1" vertex="1">
           <mxGeometry x="300" y="2" width="200" height="170" as="geometry" />
         </mxCell>
-        <mxCell id="mnt" value="&lt;b&gt;&lt;i&gt;&lt;font color=&quot;#0066CC&quot;&gt;mnt&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#E6F0FF;strokeWidth=2;" parent="containerN" vertex="1">
+        <mxCell id="mnt" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;mnt&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=light-dark(#347bd3, #19212e);strokeWidth=2;" parent="containerN" vertex="1">
           <mxGeometry x="60" y="93" width="80" height="50" as="geometry" />
         </mxCell>
         <mxCell id="n-5-sT_MfarnOfueAIsK-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#ff0000, #ededed);endArrow=classic;curved=1;exitX=0.65;exitY=0.02;exitDx=0;exitDy=0;exitPerimeter=0;" parent="containerN" source="mnt" edge="1">
@@ -24,19 +24,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="container3" value="Meta Level 3" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontStyle=1;startSize=30;" parent="1" vertex="1">
+        <mxCell id="container3" value="Meta Level 3" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=light-dark(#05aa02, #091e09);fontStyle=1;startSize=30;" parent="1" vertex="1">
           <mxGeometry x="100" y="210" width="700" height="390" as="geometry" />
         </mxCell>
-        <mxCell id="mt" value="&lt;b&gt;&lt;i&gt;&lt;font color=&quot;#CC9900&quot;&gt;mt&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#FFFFCC;strokeWidth=2;" parent="container3" vertex="1">
+        <mxCell id="mt" value="&lt;b&gt;&lt;i&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;mt&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=light-dark(#cb9900, #181800);strokeWidth=2;" parent="container3" vertex="1">
           <mxGeometry x="230" y="319" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="mlt" value="&lt;b&gt;&lt;i&gt;&lt;font color=&quot;#00AA00&quot;&gt;mlt&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#E6FFE6;strokeWidth=2;" parent="container3" vertex="1">
+        <mxCell id="mlt" value="&lt;b&gt;&lt;i&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;mlt&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=light-dark(#05aa02, #091e09);strokeWidth=2;" parent="container3" vertex="1">
           <mxGeometry x="102" y="319" width="80" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="mr" value="mr" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0066CC;" parent="container3" vertex="1">
+        <mxCell id="mr" value="&lt;b&gt;&lt;i&gt;mr&lt;/i&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0066CC;" parent="container3" vertex="1">
           <mxGeometry x="498" y="314" width="70" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="mrs" value="mrs" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0066CC;" parent="container3" vertex="1">
+        <mxCell id="mrs" value="&lt;b&gt;&lt;i&gt;mrs&lt;/i&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0066CC;" parent="container3" vertex="1">
           <mxGeometry x="388" y="314" width="70" height="40" as="geometry" />
         </mxCell>
         <mxCell id="type_rel" value="&lt;b&gt;&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;type&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=#0066CC;" parent="container3" vertex="1">
