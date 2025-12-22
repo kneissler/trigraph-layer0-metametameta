@@ -1,8 +1,8 @@
-# Trigraph Layer-0 MetaMeta
+# Trigraph Layer-0 MetaMetaMeta
 
 ## Overview
 
-This repository contains the Layer-0 MetaMeta system - a self-describing meta-model with multiple meta-levels, type hierarchies, and relation signatures. The system is defined using `.sheet` files and visualized through PlantUML diagrams.
+This repository contains the Layer-0 of a self-describing meta-model with multiple meta-levels, type hierarchies, and relation signatures. The system is defined using `.sheet` files.
 
 ## Quick Links
 
