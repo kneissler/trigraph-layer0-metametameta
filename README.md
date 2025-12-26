@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the Layer-0 of a self-describing meta-model with multiple meta-levels, type hierarchies, and relation signatures. The system is defined using `.sheet` files.
+This repository contains the Layer-0 of the trigraph type hierarchy, a self-describing model with multiple meta-levels, type hierarchies, and relation signatures. The system is defined using `.sheet` files.
 
 ## Quick Links
 

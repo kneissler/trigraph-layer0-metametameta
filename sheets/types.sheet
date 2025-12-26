@@ -1,7 +1,7 @@
 meta:
   name: types
   package: layer-0.metametameta
-  description: type relation and higher meta level type nodes
+  description: types (targets of the type relation) on meta levels >= 2
 references:
   type: .metaRelations.
   metaLevel: .metaRelations.
