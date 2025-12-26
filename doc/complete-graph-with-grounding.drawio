@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
   <diagram name="Complete MetaMeta Graph" id="graph">
-    <mxGraphModel dx="914" dy="2027" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="504" dy="1791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -258,16 +258,16 @@
           <mxGeometry height="20" width="360" x="20" y="100" as="geometry" />
         </mxCell>
         <mxCell id="legend_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontStyle=1;startSize=30;" value="&lt;b&gt;Legend (Layer 0)&lt;/b&gt;" vertex="1">
-          <mxGeometry height="800" width="273" x="1500" y="-312.19" as="geometry" />
+          <mxGeometry height="800" width="273" x="1497" y="-312.19" as="geometry" />
         </mxCell>
-        <mxCell id="legend_type_title" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=1;" value="&lt;b&gt;Types (background/border color)&lt;/b&gt;" vertex="1">
+        <mxCell id="legend_type_title" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=1;" value="&lt;b&gt;Types&lt;/b&gt;" vertex="1">
           <mxGeometry height="20" width="380" x="10" y="40" as="geometry" />
         </mxCell>
         <mxCell id="legend_type1" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;b&gt;&lt;font color=&quot;#0066CC&quot;&gt;&lt;i&gt;mnt&lt;/i&gt;&lt;/font&gt;&lt;/b&gt;&amp;nbsp;= metaNType (ml=N)" vertex="1">
           <mxGeometry height="20" width="240" x="20" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="legend_type2" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;b&gt;&lt;font color=&quot;#CC9900&quot;&gt;&lt;i&gt;mt&lt;/i&gt;&lt;/font&gt;&lt;/b&gt;&amp;nbsp;= metaType (ml=3)" vertex="1">
-          <mxGeometry height="20" width="240" x="20" y="80" as="geometry" />
+        <mxCell id="legend_type2" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;font&gt;&lt;b style=&quot;&quot;&gt;&lt;i style=&quot;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&amp;nbsp; mt&amp;nbsp;&lt;/font&gt;&lt;/i&gt;&lt;/b&gt;&lt;/font&gt;= metaType (ml=3)" vertex="1">
+          <mxGeometry height="20" width="200" x="63" y="81" as="geometry" />
         </mxCell>
         <mxCell id="y8TMbiYartTCWvdmmpqS-14" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;b&gt;&lt;font color=&quot;#0f8088&quot;&gt;&lt;i&gt;mr&lt;/i&gt;&lt;/font&gt;&lt;/b&gt;&amp;nbsp;= metaRelation (ml=3)" vertex="1">
           <mxGeometry height="20" width="240" x="20" y="100" as="geometry" />
@@ -361,6 +361,12 @@
         </mxCell>
         <mxCell id="legend_type8" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;b&gt;&lt;font color=&quot;#FFFF33&quot;&gt;rpr&lt;/font&gt;&lt;/b&gt;&amp;nbsp;= relationPropertyRelation" vertex="1">
           <mxGeometry height="20" width="240" x="20" y="754" as="geometry" />
+        </mxCell>
+        <mxCell id="4rcjDRaJ5Oi-6SsU8W6B-9" parent="legend_container" style="ellipse;whiteSpace=wrap;html=1;fillColor=#E6F0FF;strokeColor=light-dark(#9773a5, #56aeff);strokeWidth=2;align=center;" value="" vertex="1">
+          <mxGeometry height="9.84" width="10" x="20" y="86.16" as="geometry" />
+        </mxCell>
+        <mxCell id="4rcjDRaJ5Oi-6SsU8W6B-11" parent="legend_container" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="" vertex="1">
+          <mxGeometry height="10" width="20" x="40" y="86" as="geometry" />
         </mxCell>
         <mxCell id="y8TMbiYartTCWvdmmpqS-1" edge="1" parent="1" source="mnt" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#00CCCC,#EDEDED);endArrow=classic;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="mlN" value="">
           <mxGeometry relative="1" as="geometry">
