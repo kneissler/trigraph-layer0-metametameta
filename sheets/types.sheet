@@ -4,7 +4,7 @@ meta:
   description: types (targets of the type relation) on meta levels >= 2
 references:
   type: .metaRelations.
-  metaLevel: .metaRelations.
+metaLevel: .metaRelations.
   metalevel-2: .metaLevels.
   metalevel-3: .metaLevels.
   metalevel-N: .metaLevels.
