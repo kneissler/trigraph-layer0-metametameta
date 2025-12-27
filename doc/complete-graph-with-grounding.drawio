@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
   <diagram name="Complete MetaMeta Graph" id="graph">
-    <mxGraphModel dx="3085" dy="3280" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="726" dy="1919" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -236,7 +236,7 @@
             <mxPoint x="740" y="-146.19" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="visibility_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;fontStyle=1;startSize=30;" value="+#&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="visibility_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#bac8d3;strokeColor=#23445d;fontStyle=1;startSize=30;" value="Visibility" vertex="1">
           <mxGeometry height="185" width="280" x="2133" y="-570" as="geometry" />
         </mxCell>
         <mxCell id="legend_shape1" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="public (visible to all following layers)" vertex="1">
