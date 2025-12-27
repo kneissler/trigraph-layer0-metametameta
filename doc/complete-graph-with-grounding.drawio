@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
   <diagram name="Complete MetaMeta Graph" id="graph">
-    <mxGraphModel dx="1234" dy="2212" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
+    <mxGraphModel dx="1543" dy="2390" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1500" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -236,20 +236,26 @@
             <mxPoint x="740" y="-146.19" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="visibility_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontStyle=1;startSize=30;" value="&lt;b&gt;Visibility&lt;/b&gt;" vertex="1">
-          <mxGeometry height="140" width="273" x="1500" y="-482.19" as="geometry" />
+        <mxCell id="visibility_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontStyle=1;startSize=30;" value="&lt;b&gt;Visibility (Shape)&lt;/b&gt;" vertex="1">
+          <mxGeometry height="150" width="290" x="1500" y="-520" as="geometry" />
         </mxCell>
-        <mxCell id="legend_shape_title" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=1;" value="&lt;b&gt;Shape&lt;/b&gt;" vertex="1">
-          <mxGeometry height="20" width="380" x="10" y="40" as="geometry" />
+        <mxCell id="legend_shape1" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="public (visible to all following layers)" vertex="1">
+          <mxGeometry height="20" width="210" x="60" y="50" as="geometry" />
         </mxCell>
-        <mxCell id="legend_shape1" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="▭ = public" vertex="1">
-          <mxGeometry height="20" width="360" x="20" y="60" as="geometry" />
+        <mxCell id="legend_shape2" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="public+1 (visible to following layer only)" vertex="1">
+          <mxGeometry height="20" width="220" x="60" y="83" as="geometry" />
         </mxCell>
-        <mxCell id="legend_shape2" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="⬡ = public+1" vertex="1">
-          <mxGeometry height="20" width="360" x="20" y="80" as="geometry" />
+        <mxCell id="legend_shape3" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="private (visible to this layer only)" vertex="1">
+          <mxGeometry height="20" width="220" x="60" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="legend_shape3" parent="visibility_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="○ = private" vertex="1">
-          <mxGeometry height="20" width="360" x="20" y="100" as="geometry" />
+        <mxCell id="CDxsXqHZiNQtEWK4zw7P-18" parent="visibility_container" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;strokeWidth=1;" value="" vertex="1">
+          <mxGeometry height="19.81" width="30" x="20" y="83.19" as="geometry" />
+        </mxCell>
+        <mxCell id="CDxsXqHZiNQtEWK4zw7P-15" parent="visibility_container" style="rounded=0;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="20" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="CDxsXqHZiNQtEWK4zw7P-16" parent="visibility_container" style="ellipse;whiteSpace=wrap;html=1;rounded=0;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=12;" value="" vertex="1">
+          <mxGeometry height="20" width="30" x="20" y="120" as="geometry" />
         </mxCell>
         <mxCell id="legend_container" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontStyle=1;startSize=30;" value="&lt;b&gt;Legend (Layer 0)&lt;/b&gt;" vertex="1">
           <mxGeometry height="800" width="273" x="1497" y="-312.19" as="geometry" />
@@ -290,7 +296,7 @@
         <mxCell id="legend_type6" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=10;" value="&lt;b&gt;&lt;i&gt;rs&lt;/i&gt;&lt;/b&gt;&amp;nbsp;= relationSignature&amp;nbsp;(ml=2)" vertex="1">
           <mxGeometry height="20" width="200" x="65" y="271" as="geometry" />
         </mxCell>
-        <mxCell id="legend_edge_title" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=1;" value="&lt;b&gt;Relations&lt;/b&gt;" vertex="1">
+        <mxCell id="legend_edge_title" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;fontStyle=1;" value="&lt;b&gt;Relations (arrows)&lt;/b&gt;" vertex="1">
           <mxGeometry height="20" width="380" x="10" y="300" as="geometry" />
         </mxCell>
         <mxCell id="rIztTCZjae18vwxeVeYt-2" parent="legend_container" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;" value="&lt;font style=&quot;color: rgb(255, 0, 0);&quot;&gt;→ &lt;b&gt;type&lt;/b&gt;&lt;/font&gt; = type&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; text-wrap-mode: nowrap; font-size: 0px;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%26lt%3Bfont%20color%3D%26quot%3B%2300AA00%26quot%3B%26gt%3BGreen%26lt%3B%2Ffont%26gt%3B%20%3D%20nextMetaLevel%22%20style%3D%22text%3Bhtml%3D1%3Balign%3Dleft%3BverticalAlign%3Dmiddle%3BwhiteSpace%3Dwrap%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22947%22%20y%3D%22318%22%20width%3D%22360%22%20height%3D%2220%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" vertex="1">
