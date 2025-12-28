@@ -1,0 +1,1980 @@
+# Complete Graph with Grounding - Text Analysis
+# Source: complete-graph-with-grounding.drawio
+# MetaMetaMeta Model with Class-Inheritance and Persistence-Structure and Grounding
+# Last Updated: Based on current state of complete-graph-with-grounding.drawio
+
+================================================================================
+NODE COUNT SUMMARY TABLE
+================================================================================
+
+NODES BY METALEVEL AND KIND:
+-----------------------------
+MetaLevel  Type         Relation    Signature   RelProp    MetaLevel   Total
+---------  ----         --------    ---------   -------    ---------   -----
+ml=3       6 (L0)       7 (L0)      7 (L0)      1 (L0)     0           21
+ml=2       9 (L1+L2)    7 (L1)      6 (L1+L2)   2          5           29
+ml=1       0            0           0           0          0           59
+---------  ----         --------    ---------   -------    ---------   -----
+Total:     15           14          13          3          5           109
+
+BREAKDOWN BY LAYER:
+-------------------
+Layer 0 (MetaMetaMeta, ml=3):
+  - MetaTypes: 3 (mnt, mt, mlt)
+  - MetaRelations: 3 (mr, mrs, rp)
+  - Relations: 7 (type_rel, ml_rel, sig_rel, st_rel, tt_rel, nml_rel, rpr)
+  - Signatures: 7 (a2at, a2mlt, mlt2mlt, mrs2mt, mnt2mnt, mr2mrs, rs2rp)
+  - Relation Properties: 0
+  - MetaLevel Nodes: 5 (ml0, ml1, ml2, ml3, mlN) [actually ml=2]
+  SUBTOTAL: 25 nodes
+
+Layer 1 Class-Inheritance (ml=2):
+  - Types: 3 (class, rel, rs)
+  - Relations: 5 (tc, sc, inh, supc, ith)
+  - Signatures: 4 (c2c, rs2c, r2r, mr2mr)
+  - Relation Properties: 2 (man, uni)
+  SUBTOTAL: 14 nodes
+
+Layer 1 Persistence-Structure (ml=2):
+  - Types: 4 (lay, pac, sh, vn)
+  - Relations: 0 (listed separately but not detailed)
+  - Signatures: 0 (listed separately but not detailed)
+  SUBTOTAL: 4 nodes
+
+Layer 2 Grounding (ml=2 & ml=1):
+  - Types (ml=2): 1 (gt)
+  - Relations (ml=2): 2 (gdr, grr)
+  - Signatures (ml=2): 2 (gt2a, gt2gt)
+  - Grounding Nodes (ml=1): 59 (+4 from previous version)
+  SUBTOTAL: 64 nodes
+
+GRAND TOTAL: 107 nodes (excluding containers)
+
+CHANGE LOG:
+-----------
+- Grounding nodes increased from 55 to 59 (+4 nodes)
+- New grounding nodes: dependency relation, nextLayer relation
+- valence-constraints now properly connected (was orphaned, now fixed)
+- Total nodes: 103 → 107
+
+NODES BY PACKAGE/CONTAINER:
+---------------------------
+Package ID                      | Node Count | Primary Contents
+------------------------------- | ---------- | ----------------
+y8TMbiYartTCWvdmmpqS-10        |     5      | mnt, mt, nml_rel, sig3, sig6
+4rcjDRaJ5Oi-6SsU8W6B-1         |     7      | ml_rel, sig2, sig4, ml0, ml1, ml2, ml3, mlN
+y8TMbiYartTCWvdmmpqS-112       |     5      | type_rel, sig1, rp, man, uni, rpr, rs2rp
+y8TMbiYartTCWvdmmpqS-116       |     6      | st_rel, tt_rel, mrs, c2c, rs2c, mr2mr
+y8TMbiYartTCWvdmmpqS-117       |     5      | mr, sig5, sig_rel, tc, sc
+y8TMbiYartTCWvdmmpqS-296       |     1      | class
+y8TMbiYartTCWvdmmpqS-307       |     2      | rel, rs
+y8TMbiYartTCWvdmmpqS-309       |     3      | inh, supc, ith
+[Grounding layer]              |    59      | All ml=1 grounding nodes
+
+NODES BY VISIBILITY (SHAPE):
+-----------------------------
+Shape       Visibility   Count   Examples
+---------   ----------   -----   --------
+Rectangle   public       29      type_rel, ml_rel, sig_rel, rpr, ml0, ml1, class, rel, rs, tc, sc, inh, supc, ith, man, uni
+Hexagon     public+1     8       mr, mrs, rp, st_rel, tt_rel, ml2, gt, gdr, grr
+Ellipse     private      70      mnt, mt, mlt, nml_rel, sig1-6, ml3, mlN, c2c, rs2c, r2r, mr2mr, all 59 grounding nodes
+
+================================================================================
+LEGEND - NODE TYPE MAPPINGS
+================================================================================
+
+LAYER 0 - METATYPES (ml=3)
+--------------------------
+mnt     = metaNType (ml=N)
+mt      = metaType (ml=3)
+mr      = metaRelation (ml=3)
+mrs     = metaRelationSignature (ml=3)
+rp      = relationProperty (ml=3)
+mlt     = metaLevelType (ml=2)
+
+LAYER 1 - TYPES (ml=2)
+----------------------
+class   = class (ml=2)
+rel     = relation (ml=2)
+rs      = relationSignature (ml=2)
+lay     = layer (ml=2)
+pac     = package (ml=2)
+sh      = sheet (ml=2)
+vn      = versionNode (ml=2)
+dn      = descriptionNode (ml=2)
+gt      = groundingType (ml=2)
+
+METALEVEL NODES (ml=2)
+----------------------
+ml0     = metaLevel 0
+ml1     = metaLevel 1
+ml2     = metaLevel 2
+ml3     = metaLevel 3
+mlN     = metaLevel N (N >= 3)
+
+RELATION PROPERTIES (ml=2)
+--------------------------
+man     = mandatory
+uni     = unique
+imp     = implicit
+tra     = transient
+
+================================================================================
+LEGEND - RELATION TYPE MAPPINGS
+================================================================================
+
+LAYER 0 RELATIONS (ml=3)
+------------------------
+type    = type relation              [COLOR: RED #ff0000]
+ml      = metaLevel relation         [COLOR: CYAN #00CCCC]
+sig     = signature relation         [COLOR: ORANGE #FF8800]
+st      = sourceType relation        [COLOR: BLUE #0000FF]
+tt      = targetType relation        [COLOR: PURPLE #AA00FF]
+nml     = nextMetaLevel relation     [COLOR: GREEN #00AA00]
+rpr     = relationPropertyRelation   [COLOR: YELLOW #FFFF33]
+
+LAYER 1 CLASS-INHERITANCE RELATIONS (ml=2)
+------------------------------------------
+tc      = targetClass
+sc      = sourceClass
+inh     = inheritance
+supc    = superClass
+ith     = inverseTransitiveHull
+
+LAYER 1 PERSISTENCE-STRUCTURE RELATIONS (ml=2)
+----------------------------------------------
+version = version
+descr   = description
+contains= contains
+refers  = refers
+
+LAYER 2 GROUNDING RELATIONS (ml=2)
+----------------------------------
+gdr     = groundingDetailRelation
+grr     = groundingReferenceRelation
+
+================================================================================
+LEGEND - SIGNATURE NODE MAPPINGS
+================================================================================
+
+LAYER 0 SIGNATURES (ml=3)
+-------------------------
+a2at    = any-to-anyType
+a2mlt   = any-to-metaLevelType
+mlt2mlt = metaLevelType-to-metaLevelType
+mrs2mt  = metaRelationSignature-to-metaType
+mnt2mnt = metaNType-to-metaNType
+mr2mrs  = metaRelation-to-metaRelationSignature
+rs2rp   = relationSignature-to-relationProperty
+
+LAYER 1 CLASS-INHERITANCE SIGNATURES (ml=2)
+-------------------------------------------
+c2c     = class-to-class
+rs2c    = relationSignature-to-class
+r2r     = relation-to-relation
+mr2mr   = metaRelation-to-metaRelation
+
+LAYER 1 PERSISTENCE-STRUCTURE SIGNATURES (ml=2)
+-----------------------------------------------
+pa2pa   = package-to-package
+pa2sh   = package-to-sheet
+pa2ver  = package-to-version
+lay2lay = layer-to-layer
+lay2pa  = layer-to-package
+sh2a    = sheet-to-any
+sh2sh   = sheet-to-sheet
+2desc   = to-description
+
+LAYER 2 GROUNDING SIGNATURES (ml=2)
+-----------------------------------
+gt2gt   = groundingType-to-groundingType
+gt2a    = groundingType-to-any
+
+================================================================================
+LEGEND - VISIBILITY RULES
+================================================================================
+
+SHAPE           VISIBILITY              DESCRIPTION
+-----           ----------              -----------
+Rectangle       public                  visible to all following layers
+Hexagon         public+1                visible to following layer only
+Ellipse         private                 visible to this layer only
+
+================================================================================
+NODE DEFINITIONS - LAYER 0 (ml=3)
+================================================================================
+
+METATYPE NODES
+--------------
+ID: mnt
+  Full Name: metaNType
+  MetaLevel: N
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#e5f0ff, #56aeff), strokeWidth=2
+  Position: (710, -16.19), Size: 52x50
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+ID: mt
+  Full Name: metaType
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#9773a5, #56aeff), strokeWidth=4 [purple stroke]
+  Position: (717, -147.19), Size: 40x27.5
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+ID: mlt
+  Full Name: metaLevelType
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#05aa02, #56aeff), strokeWidth=4 [green stroke]
+  Position: (645.78, 87.31), Size: 50x30
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+METARELATION NODES
+------------------
+ID: mr
+  Full Name: metaRelation
+  MetaLevel: 3
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#0f8088, #56aeff), strokeWidth=4 [cyan stroke]
+  Position: (766, 116.81), Size: 46x23.75
+  Package: y8TMbiYartTCWvdmmpqS-117
+
+ID: mrs
+  Full Name: metaRelationSignature
+  MetaLevel: 3
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#b46505, #56aeff), strokeWidth=4 [orange stroke]
+  Position: (870, -20.69), Size: 40x25
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+ID: rp (y8TMbiYartTCWvdmmpqS-99)
+  Full Name: relationProperty
+  MetaLevel: 3
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#d6b655, #56aeff), strokeWidth=4 [yellow stroke]
+  Position: (589.78, -93.19), Size: 35.22x26
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+RELATION NODES
+--------------
+ID: type_rel
+  Full Name: type relation
+  MetaLevel: 3
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "type" [red text #FF0000]
+  Position: (624, -124.69), Size: 30x21.5
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+ID: ml_rel
+  Full Name: metaLevel relation
+  MetaLevel: 3
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "ml" [cyan text #00CCCC]
+  Position: (568, 29.81), Size: 42x20
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: sig_rel
+  Full Name: signature relation
+  MetaLevel: 3
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "sig" [orange text #FF8800]
+  Position: (814, 47.81), Size: 26x23
+  Package: y8TMbiYartTCWvdmmpqS-117
+
+ID: st_rel
+  Full Name: sourceType relation
+  MetaLevel: 3
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "st" [blue text #0000FF]
+  Position: (811, -50.19), Size: 30x20
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+ID: tt_rel
+  Full Name: targetType relation
+  MetaLevel: 3
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "tt" [purple text #AA00FF]
+  Position: (841, -61.19), Size: 30x20
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+ID: nml_rel
+  Full Name: nextMetaLevel relation
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "nml" [green text #00AA00]
+  Position: (624.78, -16.19), Size: 30x27.5
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+ID: rpr (y8TMbiYartTCWvdmmpqS-90)
+  Full Name: relationPropertyRelation
+  MetaLevel: 3
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "rpr" [yellow text #FFFF33]
+  Position: (561.39, -21.19), Size: 35.22x20
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+SIGNATURE NODES
+---------------
+ID: sig1
+  Full Name: a2at (any-to-anyType)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "a2at"
+  Position: (669, -100.19), Size: 30x31
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+ID: sig2
+  Full Name: a2mlt (any-to-metaLevelType)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "a2mlt"
+  Position: (591, 76.81), Size: 40x23.19
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: sig3
+  Full Name: mnt2mnt (metaNType-to-metaNType)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "mnt2mnt"
+  Position: (819, -2.19), Size: 44x30
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+ID: sig4
+  Full Name: mlt2mlt (metaLevelType-to-metaLevelType)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "mlt2mlt"
+  Position: (627.5, 36.81), Size: 44.5x25.5
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: sig5
+  Full Name: mr2mrs (metaRelation-to-metaRelationSignature)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "mr2mrs"
+  Position: (742, 76.81), Size: 50x20
+  Package: y8TMbiYartTCWvdmmpqS-117
+
+ID: sig6
+  Full Name: mrs2mt (metaRelationSignature-to-metaType)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "mrs2mt"
+  Position: (796, -110.69), Size: 50x27
+  Package: y8TMbiYartTCWvdmmpqS-10
+
+ID: y8TMbiYartTCWvdmmpqS-92
+  Full Name: rs2rp (relationSignature-to-relationProperty)
+  MetaLevel: 3
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#000000, #56aeff)
+  Label: "rs2rp"
+  Position: (628.78, -48.89), Size: 38x20
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+METALEVEL NODES
+---------------
+ID: ml0
+  Full Name: metaLevel 0
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6FFE6 (light green)
+  Stroke: #00AA00 (green)
+  Label: "ml0"
+  Position: (498, 74.81), Size: 30x30
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: ml1
+  Full Name: metaLevel 1
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E6FFE6 (light green)
+  Stroke: #00AA00 (green)
+  Label: "ml1"
+  Position: (527, 134.31), Size: 31.13x25
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: ml2
+  Full Name: metaLevel 2
+  MetaLevel: 2
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6FFE6 (light green)
+  Stroke: #00AA00 (green)
+  Label: "ml2"
+  Position: (572, 171.81), Size: 40x30
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: ml3
+  Full Name: metaLevel 3
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6FFE6 (light green)
+  Stroke: #00AA00 (green)
+  Label: "ml3"
+  Position: (633, 201.81), Size: 50x29
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+ID: mlN
+  Full Name: metaLevel N (N >= 3)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #E6FFE6 (light green)
+  Stroke: #00AA00 (green)
+  Label: "mlN"
+  Position: (705, 211.81), Size: 52x30
+  Package: 4rcjDRaJ5Oi-6SsU8W6B-1
+
+RELATION PROPERTY NODES
+------------------------
+ID: y8TMbiYartTCWvdmmpqS-89
+  Full Name: man (mandatory)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #fff2cc (light yellow)
+  Stroke: #d6b656 (yellow)
+  Label: "man"
+  Position: (520, -55.38), Size: 26x15
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+ID: y8TMbiYartTCWvdmmpqS-78
+  Full Name: uni (unique)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #fff2cc (light yellow)
+  Stroke: #d6b656 (yellow)
+  Label: "uni"
+  Position: (520, -82.19), Size: 26x15
+  Package: y8TMbiYartTCWvdmmpqS-112
+
+================================================================================
+NODE DEFINITIONS - LAYER 1 CLASS-INHERITANCE (ml=2)
+================================================================================
+
+TYPE NODES
+----------
+ID: class
+  Full Name: class
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #e1d5e7 (light purple)
+  Stroke: #9673a6 (purple), strokeWidth=3
+  Label: "class"
+  Position: (664.78, -208.19), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-296
+
+ID: y8TMbiYartTCWvdmmpqS-32
+  Full Name: rel (relation)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #e1d5e7 (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "rel"
+  Position: (756, -236.19), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-307
+
+ID: y8TMbiYartTCWvdmmpqS-33
+  Full Name: rs (relationSignature)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #e1d5e7 (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "rs"
+  Position: (826, -216.19), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-307
+
+RELATION NODES
+--------------
+ID: y8TMbiYartTCWvdmmpqS-36
+  Full Name: tc (targetClass)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #b0e3e6 (light cyan)
+  Stroke: #0e8088 (cyan)
+  Label: "tc"
+  Position: (893.88, 158.81), Size: 20x17.5
+  Package: y8TMbiYartTCWvdmmpqS-117
+
+ID: y8TMbiYartTCWvdmmpqS-37
+  Full Name: sc (sourceClass)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #b0e3e6 (light cyan)
+  Stroke: #0e8088 (cyan)
+  Label: "sc"
+  Position: (872.02, 180.81), Size: 19.86x20
+  Package: y8TMbiYartTCWvdmmpqS-117
+
+ID: y8TMbiYartTCWvdmmpqS-38
+  Full Name: inh (inheritance)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #b0e3e6 (light cyan)
+  Stroke: #0e8088 (cyan)
+  Label: "inh"
+  Position: (915.44, 86.81), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-309
+
+ID: y8TMbiYartTCWvdmmpqS-52
+  Full Name: supc (superClass)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #b0e3e6 (light cyan)
+  Stroke: #0e8088 (cyan)
+  Label: "supc"
+  Position: (903.88, 126.31), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-309
+
+ID: y8TMbiYartTCWvdmmpqS-57
+  Full Name: ith (inverseTransitiveHull)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #b0e3e6 (light cyan)
+  Stroke: #0e8088 (cyan)
+  Label: "ith" [purple text #FF00FF]
+  Position: (931.05, 47.69), Size: 31.78x20
+  Package: y8TMbiYartTCWvdmmpqS-309
+
+SIGNATURE NODES
+---------------
+ID: y8TMbiYartTCWvdmmpqS-40
+  Full Name: c2c (class-to-class)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "c2c"
+  Position: (928.71, -76.19), Size: 29.12x20
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+ID: y8TMbiYartTCWvdmmpqS-39
+  Full Name: rs2c (relationSignature-to-class)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "rs2c"
+  Position: (947.88, -43.19), Size: 36.12x22
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+ID: y8TMbiYartTCWvdmmpqS-140
+  Full Name: r2r (relation-to-relation)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "r2r"
+  Package: y8TMbiYartTCWvdmmpqS-309
+
+ID: y8TMbiYartTCWvdmmpqS-29
+  Full Name: mr2mr (metaRelation-to-metaRelation)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "mr2mr"
+  Position: (930, -10.19), Size: 40x20
+  Package: y8TMbiYartTCWvdmmpqS-116
+
+================================================================================
+NODE DEFINITIONS - LAYER 1 PERSISTENCE-STRUCTURE (ml=2)
+================================================================================
+
+TYPE NODES
+----------
+ID: y8TMbiYartTCWvdmmpqS-235
+  Full Name: lay (layer)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E5CCFF (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "lay"
+
+ID: y8TMbiYartTCWvdmmpqS-232
+  Full Name: pac (package)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E5CCFF (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "pac"
+
+ID: y8TMbiYartTCWvdmmpqS-233
+  Full Name: sh (sheet)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E5CCFF (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "sh"
+
+ID: y8TMbiYartTCWvdmmpqS-234
+  Full Name: vn (versionNode)
+  MetaLevel: 2
+  Shape: rectangle
+  Visibility: public (visible to all following layers)
+  Fill: #E5CCFF (light purple)
+  Stroke: #9673a6 (purple)
+  Label: "vn"
+
+================================================================================
+NODE DEFINITIONS - LAYER 2 GROUNDING
+================================================================================
+
+TYPE NODES (ml=2)
+-----------------
+ID: y8TMbiYartTCWvdmmpqS-205
+  Full Name: gt (groundingType)
+  MetaLevel: 2
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #e1d5e7 (light purple)
+  Stroke: light-dark(#999fa9, #9577a3) (gray-purple), strokeWidth=4
+  Label: "gt"
+
+RELATION NODES (ml=2)
+---------------------
+ID: y8TMbiYartTCWvdmmpqS-206
+  Full Name: gdr (groundingDetailRelation)
+  MetaLevel: 2
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#999fa9, #56AEFF) (gray-blue), strokeWidth=1
+  Label: "gdr"
+
+ID: y8TMbiYartTCWvdmmpqS-207
+  Full Name: grr (groundingReferenceRelation)
+  MetaLevel: 2
+  Shape: hexagon
+  Visibility: public+1 (visible to following layer only)
+  Fill: #E6F0FF (light blue)
+  Stroke: light-dark(#999fa9, #56AEFF) (gray-blue), strokeWidth=1
+  Label: "grr"
+
+SIGNATURE NODES (ml=2)
+----------------------
+ID: y8TMbiYartTCWvdmmpqS-208
+  Full Name: gt2gt (groundingType-to-groundingType)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "gt2gt"
+
+ID: y8TMbiYartTCWvdmmpqS-209
+  Full Name: gt2a (groundingType-to-any)
+  MetaLevel: 2
+  Shape: ellipse
+  Visibility: private (visible to this layer only)
+  Fill: #ffcc99 (light orange)
+  Stroke: light-dark(#b46505, #babdc0) (orange)
+  Label: "gt2a"
+
+================================================================================
+GROUNDING NODES (ml=1) - DETAILED OVERVIEW
+================================================================================
+
+SUMMARY:
+--------
+Total grounding nodes: 55 (57 in file, excluding 2 placeholder/legend nodes)
+All grounding nodes are:
+  - MetaLevel: 1
+  - Shape: ellipse
+  - Visibility: private (visible to this layer only)
+  - Fill: #eeeeee (light gray)
+  - Stroke: light-dark(#989faa, #babdc0) (gray)
+
+GROUNDING HIERARCHY:
+--------------------
+The grounding layer follows a tree structure rooted at "grounding root":
+
+grounding root (y8TMbiYartTCWvdmmpqS-370) [SELF-REFERENCING]
+├── persistence (y8TMbiYartTCWvdmmpqS-366)
+│   ├── structure node types (y8TMbiYartTCWvdmmpqS-353)
+│   │   ├── layer node → lay
+│   │   ├── package node → pac
+│   │   └── sheet node → sh
+│   └── structure relations (y8TMbiYartTCWvdmmpqS-360)
+│       ├── refers relation → [Layer 2 relation]
+│       ├── contains relation → [Layer 2 relation]
+│       └── version relation → [Layer 2 relation]
+├── grounding relations (y8TMbiYartTCWvdmmpqS-379)
+│   ├── grounding reference relation → grr
+│   ├── grounding detail relation → gdr
+│   └── grounding type → gt
+├── meta-level-hierarchy (y8TMbiYartTCWvdmmpqS-390)
+│   ├── next-meta-level relation → nml_rel
+│   ├── meta-level relation
+│   ├── meta-level 0 → ml0
+│   ├── meta-level 1 → ml1
+│   ├── meta-level 2 → ml2
+│   ├── meta-level 3 → ml3
+│   ├── meta-level N >= 3 → mlN
+│   └── type-ml-lift constraint → relation-property relation
+├── type safety (y8TMbiYartTCWvdmmpqS-450)
+│   ├── relation class-constraint
+│   │   ├── meta-level 0 → ml0
+│   │   ├── class inheritance
+│   │   │   ├── inv.transitive hull rel. → ith
+│   │   │   ├── inheritance rel. → inh
+│   │   │   ├── super class relation → supc
+│   │   │   ├── target class relation → tc
+│   │   │   └── source class relation → sc
+│   │   └── metalevel 1 types
+│   │       ├── relation signature type → rs
+│   │       └── relation type → rel
+│   └── relation type-constraint
+│       ├── type-relation → type_rel
+│       ├── source type relation → st_rel
+│       ├── target type relation → tt_rel
+│       └── signature relation → sig_rel
+├── constraints (y8TMbiYartTCWvdmmpqS-396)
+│   ├── type-ml-lift constraint → relation-property relation
+│   ├── unnecessary reference constraint
+│   │   ├── refers relation
+│   │   └── contains relation
+│   ├── reference consistency constraint
+│   │   ├── refers relation
+│   │   └── contains relation
+│   ├── layer ordering constraint
+│   │   ├── refers relation
+│   │   └── layer node
+│   ├── relation type-constraint (see above under type safety)
+│   └── relation class-constraint (see above under type safety)
+└── versioning (4rcjDRaJ5Oi-6SsU8W6B-42)
+    ├── version relation
+    └── refers relation
+
+STANDALONE GROUNDING NODES:
+---------------------------
+These nodes have no incoming edges from the hierarchy but connect to Layer 2:
+
+- valence-constraints (y8TMbiYartTCWvdmmpqS-318)
+  ├── mandatory → man
+  ├── relation property type → rp
+  └── transient → [Layer 2]
+
+- unique (y8TMbiYartTCWvdmmpqS-319) → uni
+- class type (y8TMbiYartTCWvdmmpqS-322) → class
+- version node (y8TMbiYartTCWvdmmpqS-345) → vn
+- description node (y8TMbiYartTCWvdmmpqS-346) → [description node type]
+- description relation (y8TMbiYartTCWvdmmpqS-336) → [Layer 2]
+- implicit (4rcjDRaJ5Oi-6SsU8W6B-36) → [Layer 2]
+
+COMPLETE GROUNDING NODE LIST (55 nodes):
+-----------------------------------------
+
+1. grounding root (y8TMbiYartTCWvdmmpqS-370)
+   - Edges: 1 in (self), 7 out
+   - Central hub connecting all major grounding subsystems
+
+2. persistence (y8TMbiYartTCWvdmmpqS-366)
+   - Edges: 1 in, 2 out
+   - Manages structure nodes and relations
+
+3. structure node types (y8TMbiYartTCWvdmmpqS-353)
+   - Edges: 1 in, 3 out
+   - Groups layer, package, sheet node groundings
+
+4. structure relations (y8TMbiYartTCWvdmmpqS-360)
+   - Edges: 1 in, 3 out
+   - Groups refers, contains, version relation groundings
+
+5. layer node (y8TMbiYartTCWvdmmpqS-342)
+   - Edges: 2 in, 1 out → lay (Layer 1)
+
+6. package node (y8TMbiYartTCWvdmmpqS-343)
+   - Edges: 1 in, 1 out → pac (Layer 1)
+
+7. sheet node (y8TMbiYartTCWvdmmpqS-344)
+   - Edges: 1 in, 1 out → sh (Layer 1)
+
+8. version node (y8TMbiYartTCWvdmmpqS-345)
+   - Edges: 0 in, 1 out → vn (Layer 1)
+
+9. description node (y8TMbiYartTCWvdmmpqS-346)
+   - Edges: 0 in, 1 out
+
+10. refers relation (y8TMbiYartTCWvdmmpqS-333)
+    - Edges: 5 in, 1 out
+    - Most connected node (5 incoming from multiple constraints)
+
+11. contains relation (y8TMbiYartTCWvdmmpqS-334)
+    - Edges: 3 in, 1 out
+
+12. version relation (y8TMbiYartTCWvdmmpqS-335)
+    - Edges: 2 in, 1 out
+
+13. description relation (y8TMbiYartTCWvdmmpqS-336)
+    - Edges: 0 in, 1 out
+
+14. grounding relations (y8TMbiYartTCWvdmmpqS-379)
+    - Edges: 1 in, 3 out
+
+15. grounding reference relation (y8TMbiYartTCWvdmmpqS-330)
+    - Edges: 1 in, 1 out → grr (Layer 2)
+
+16. grounding detail relation (y8TMbiYartTCWvdmmpqS-294)
+    - Edges: 1 in, 1 out → gdr (Layer 2)
+
+17. grounding type (y8TMbiYartTCWvdmmpqS-447)
+    - Edges: 1 in, 1 out → gt (Layer 2)
+
+18. meta-level-hierarchy (y8TMbiYartTCWvdmmpqS-390)
+    - Edges: 1 in, 8 out
+    - Central hub for metalevel system
+
+19. next-meta-level relation (y8TMbiYartTCWvdmmpqS-189)
+    - Edges: 1 in, 1 out → nml_rel (Layer 0)
+
+20. meta-level relation (y8TMbiYartTCWvdmmpqS-192)
+    - Edges: 1 in, 0 out
+
+21. meta-level 0 (y8TMbiYartTCWvdmmpqS-194)
+    - Edges: 2 in, 1 out → ml0 (Layer 0)
+
+22. meta-level 1 (y8TMbiYartTCWvdmmpqS-432)
+    - Edges: 1 in, 1 out → ml1 (Layer 0)
+
+23. meta-level 2 (y8TMbiYartTCWvdmmpqS-434)
+    - Edges: 1 in, 1 out → ml2 (Layer 0)
+
+24. meta-level 3 (y8TMbiYartTCWvdmmpqS-436)
+    - Edges: 1 in, 1 out → ml3 (Layer 0)
+
+25. meta-level N >= 3 (y8TMbiYartTCWvdmmpqS-195)
+    - Edges: 1 in, 1 out → mlN (Layer 0)
+
+26. type-ml-lift constraint (y8TMbiYartTCWvdmmpqS-181)
+    - Edges: 2 in, 1 out → relation-property relation
+
+27. relation-property relation (y8TMbiYartTCWvdmmpqS-188)
+    - Edges: 1 in, 1 out → rpr (Layer 0)
+
+28. type safety (y8TMbiYartTCWvdmmpqS-450)
+    - Edges: 1 in, 2 out
+
+29. relation type-constraint (y8TMbiYartTCWvdmmpqS-422)
+    - Edges: 2 in, 4 out
+
+30. type-relation (y8TMbiYartTCWvdmmpqS-186)
+    - Edges: 1 in, 1 out → type_rel (Layer 0)
+
+31. signature relation (y8TMbiYartTCWvdmmpqS-199)
+    - Edges: 1 in, 1 out → sig_rel (Layer 0)
+
+32. source type relation (y8TMbiYartTCWvdmmpqS-200)
+    - Edges: 1 in, 1 out → st_rel (Layer 0)
+
+33. target type relation (y8TMbiYartTCWvdmmpqS-201)
+    - Edges: 1 in, 1 out → tt_rel (Layer 0)
+
+34. relation class-constraint (y8TMbiYartTCWvdmmpqS-431)
+    - Edges: 2 in, 3 out
+
+35. class inheritance (y8TMbiYartTCWvdmmpqS-383)
+    - Edges: 1 in, 5 out
+
+36. inheritance rel. (y8TMbiYartTCWvdmmpqS-292)
+    - Edges: 1 in, 1 out → inh (Layer 1)
+
+37. super class relation (y8TMbiYartTCWvdmmpqS-291)
+    - Edges: 1 in, 1 out → supc (Layer 1)
+
+38. target class relation (y8TMbiYartTCWvdmmpqS-289)
+    - Edges: 1 in, 1 out → tc (Layer 1)
+
+39. source class relation (y8TMbiYartTCWvdmmpqS-290)
+    - Edges: 1 in, 1 out → sc (Layer 1)
+
+40. inv.transitive hull rel. (y8TMbiYartTCWvdmmpqS-286)
+    - Edges: 1 in, 1 out → ith (Layer 1)
+
+41. metalevel 1 types (y8TMbiYartTCWvdmmpqS-375)
+    - Edges: 1 in, 2 out
+
+42. relation type (y8TMbiYartTCWvdmmpqS-324)
+    - Edges: 1 in, 1 out → rel (Layer 1)
+
+43. relation signature type (y8TMbiYartTCWvdmmpqS-326)
+    - Edges: 1 in, 1 out → rs (Layer 1)
+
+44. class type (y8TMbiYartTCWvdmmpqS-322)
+    - Edges: 0 in, 1 out → class (Layer 1)
+
+45. constraints (y8TMbiYartTCWvdmmpqS-396)
+    - Edges: 1 in, 6 out
+    - Central hub for all constraint types
+
+46. layer ordering constraint (y8TMbiYartTCWvdmmpqS-407)
+    - Edges: 1 in, 2 out
+
+47. reference consistency constraint (y8TMbiYartTCWvdmmpqS-410)
+    - Edges: 1 in, 2 out
+
+48. unnecessary reference constraint (y8TMbiYartTCWvdmmpqS-411)
+    - Edges: 1 in, 2 out
+
+49. valence-constraints (y8TMbiYartTCWvdmmpqS-318)
+    - Edges: 0 in, 3 out
+
+50. mandatory (y8TMbiYartTCWvdmmpqS-176)
+    - Edges: 1 in, 1 out → man (Layer 0)
+
+51. unique (y8TMbiYartTCWvdmmpqS-319)
+    - Edges: 0 in, 1 out → uni (Layer 0)
+
+52. relation property type (y8TMbiYartTCWvdmmpqS-316)
+    - Edges: 1 in, 1 out → rp (Layer 0)
+
+53. transient (4rcjDRaJ5Oi-6SsU8W6B-35)
+    - Edges: 1 in, 1 out
+
+54. implicit (4rcjDRaJ5Oi-6SsU8W6B-36)
+    - Edges: 0 in, 1 out
+
+55. versioning (4rcjDRaJ5Oi-6SsU8W6B-42)
+    - Edges: 1 in, 2 out
+
+KEY GROUNDING HUB NODES:
+------------------------
+1. grounding root - 7 outgoing (connects all major subsystems)
+2. meta-level-hierarchy - 8 outgoing (all metalevel nodes)
+3. constraints - 6 outgoing (all constraint types)
+4. refers relation - 5 incoming (most referenced node)
+5. class inheritance - 5 outgoing (all inheritance relations)
+6. relation type-constraint - 4 outgoing (type system relations)
+
+GROUNDING-TO-LAYER CONNECTIONS:
+--------------------------------
+Layer 0 (ml=3) connections:
+  - meta-level nodes: ml0, ml1, ml2, ml3, mlN
+  - relations: nml_rel, type_rel, sig_rel, st_rel, tt_rel, rpr
+  - relation properties: man, uni, rp
+
+Layer 1 (ml=2) connections:
+  - types: class, rel, rs, lay, pac, sh, vn
+  - relations: inh, supc, tc, sc, ith
+
+Layer 2 (ml=2) connections:
+  - type: gt
+  - relations: gdr, grr
+
+================================================================================
+PACKAGE/CONTAINER DEFINITIONS
+================================================================================
+
+ID: y8TMbiYartTCWvdmmpqS-231
+  Type: Outermost container
+  Fill: light-dark(#FEFFEF,#1D1D1D)
+  Stroke: light-dark(#09cacc, #ededed), dashed (dashPattern=1 2), strokeWidth=2
+  Geometry: (49, -730), Size: 1391x1349
+  Contains: All diagram elements
+
+ID: y8TMbiYartTCWvdmmpqS-301
+  Type: Meta types outer container
+  Fill: light-dark(#D4D4D4,#616161)
+  Stroke: none
+  Geometry: (657, -561.1), Size: 390x443.81
+  Contains: Layer 0 meta types region
+
+ID: y8TMbiYartTCWvdmmpqS-307
+  Type: Inner green container
+  Fill: #d5e8d4 (light green)
+  Stroke: none
+  Geometry: (674, -555), Size: 361x400.71
+  Contains: Layer 1 types (rel, rs)
+
+ID: y8TMbiYartTCWvdmmpqS-114
+  Type: Layer container labeled "z"
+  Fill: light-dark(#D4D4D4,#616161)
+  Stroke: light-dark(#09cacc, #ededed), dashed (dashPattern=1 2), strokeWidth=2
+  Geometry: (426, -312.19), Size: 700x660
+  Contains: Main node cluster
+
+ID: y8TMbiYartTCWvdmmpqS-10
+  Type: Central node container
+  Fill: light-dark(#BABABA,#616161)
+  Stroke: none
+  Geometry: (551.13, -176.13), Size: 369.75x369.88
+  Contains: mnt, mt, nml_rel, sig3, sig6
+
+ID: y8TMbiYartTCWvdmmpqS-7
+  Type: Inner core container
+  Fill: light-dark(#999999,#616161)
+  Stroke: none
+  Geometry: (666, -65.19), Size: 140x140
+  Contains: mnt (centered)
+
+ID: 4rcjDRaJ5Oi-6SsU8W6B-4
+  Type: Signature container (pink)
+  Fill: #FFCCE6 (light pink)
+  Stroke: default, dashed (dashPattern=8 8)
+  Geometry: (637.11, -262.9), Size: 252.89x150.71
+  Contains: type_rel, sig1
+
+ID: 4rcjDRaJ5Oi-6SsU8W6B-1
+  Type: Signature container (pink)
+  Fill: #FFCCE6 (light pink)
+  Stroke: none, dashed (dashPattern=8 8)
+  Geometry: (484, -56), Size: 346x350
+  Contains: ml_rel, sig2, sig4, ml0, ml1, ml2, ml3, mlN
+
+ID: y8TMbiYartTCWvdmmpqS-112
+  Type: Signature container (pink)
+  Fill: #FFCCE6 (light pink)
+  Stroke: default, dashed (dashPattern=8 8), rotation=15
+  Geometry: (507.58, -167), Size: 108.42x163.81
+  Contains: type_rel, sig1, rp, man, uni, rpr, rs2rp
+
+ID: y8TMbiYartTCWvdmmpqS-296
+  Type: Type container (red border)
+  Fill: none
+  Stroke: light-dark(#ff0000, #ededed), dashed
+  Geometry: (706, -502), Size: 80x194
+  Contains: class (and possibly mt)
+
+ID: y8TMbiYartTCWvdmmpqS-309
+  Type: Container (beige/light green)
+  Fill: light-dark(#FEFFEF,#1D1D1D)
+  Stroke: none, rotation=70
+  Geometry: (944.65, -127.88), Size: 205.33x86.91
+  Contains: inh, supc, ith
+
+ID: y8TMbiYartTCWvdmmpqS-116
+  Type: Container (light blue)
+  Fill: #dae8fc (light blue)
+  Stroke: none, rotation=75
+  Geometry: (853.2, -99.47), Size: 171.75x114.3
+  Contains: st_rel, tt_rel, mrs, c2c, rs2c, mr2mr
+
+ID: y8TMbiYartTCWvdmmpqS-117
+  Type: Container (light blue)
+  Fill: #dae8fc (light blue)
+  Stroke: none, rotation=-60
+  Geometry: (800.55, 63.26), Size: 235.56x102
+  Contains: mr, sig5, sig_rel, tc, sc
+
+================================================================================
+EDGE DEFINITIONS - TYPE RELATIONS (RED #ff0000)
+================================================================================
+
+Edge: n-5-sT_MfarnOfueAIsK-14
+  Relation: type
+  Source: mnt
+  Target: mnt
+  Type: self-loop (reflexive)
+  Description: mnt is a type of itself
+
+Edge: n-5-sT_MfarnOfueAIsK-18
+  Relation: type
+  Source: class
+  Target: mt
+  Description: class is a type of metaType
+
+Edge: y8TMbiYartTCWvdmmpqS-23
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-7 (container)
+  Target: mnt
+  Description: container is a type of metaNType
+
+Edge: y8TMbiYartTCWvdmmpqS-34
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-32 (rel)
+  Target: mt
+  Description: relation is a type of metaType
+
+Edge: y8TMbiYartTCWvdmmpqS-13
+  Relation: type
+  Source: ml3
+  Target: mlt
+  Description: ml3 is a type of metaLevelType
+
+Edge: y8TMbiYartTCWvdmmpqS-108
+  Relation: type
+  Source: mlN
+  Target: mlt
+  Description: mlN is a type of metaLevelType
+
+Edge: y8TMbiYartTCWvdmmpqS-109
+  Relation: type
+  Source: ml2
+  Target: mlt
+  Description: ml2 is a type of metaLevelType
+
+Edge: y8TMbiYartTCWvdmmpqS-110
+  Relation: type
+  Source: ml1
+  Target: mlt
+  Description: ml1 is a type of metaLevelType
+
+Edge: y8TMbiYartTCWvdmmpqS-73
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-36 (tc)
+  Target: mr
+  Description: targetClass is a type of metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-74
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-37 (sc)
+  Target: mr
+  Description: sourceClass is a type of metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-60
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-38 (inh)
+  Target: mr
+  Description: inheritance is a type of metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-56
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-52 (supc)
+  Target: mr
+  Description: superClass is a type of metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-67
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-57 (ith)
+  Target: mr
+  Description: inverseTransitiveHull is a type of metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-41
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Target: mrs
+  Description: relationSignature-to-class is a type of metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-42
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Target: mrs
+  Description: class-to-class is a type of metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-141
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-140 (r2r)
+  Target: mrs
+  Description: relation-to-relation is a type of metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-30
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-29 (mr2mr)
+  Target: mrs
+  Description: metaRelation-to-metaRelation is a type of metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-68
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-57 (ith)
+  Target: mrs
+  Description: inverseTransitiveHull is also a type of metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-91
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-89 (man)
+  Target: rp
+  Description: mandatory is a type of relationProperty
+
+Edge: y8TMbiYartTCWvdmmpqS-95
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-78 (uni)
+  Target: rp
+  Description: unique is a type of relationProperty
+
+Edge: y8TMbiYartTCWvdmmpqS-35
+  Relation: type
+  Source: y8TMbiYartTCWvdmmpqS-33 (rs)
+  Target: mt
+  Description: relationSignature is a type of metaType
+
+================================================================================
+EDGE DEFINITIONS - METALEVEL RELATIONS (CYAN #00CCCC)
+================================================================================
+
+Edge: y8TMbiYartTCWvdmmpqS-1
+  Relation: ml (metaLevel)
+  Source: mnt
+  Target: mlN
+  Description: mnt has metaLevel mlN
+
+Edge: y8TMbiYartTCWvdmmpqS-22
+  Relation: ml (metaLevel)
+  Source: y8TMbiYartTCWvdmmpqS-10 (container)
+  Target: ml3
+  Description: container has metaLevel ml3
+
+Edge: y8TMbiYartTCWvdmmpqS-31
+  Relation: ml (metaLevel)
+  Source: y8TMbiYartTCWvdmmpqS-29 (mr2mr)
+  Target: ml2
+  Description: mr2mr has metaLevel ml2
+
+Edge: y8TMbiYartTCWvdmmpqS-43
+  Relation: ml (metaLevel)
+  Source: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Target: ml2
+  Description: rs2c has metaLevel ml2
+
+Edge: y8TMbiYartTCWvdmmpqS-44
+  Relation: ml (metaLevel)
+  Source: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Target: ml2
+  Description: c2c has metaLevel ml2
+
+================================================================================
+EDGE DEFINITIONS - SIGNATURE RELATIONS (ORANGE #FF8800)
+================================================================================
+
+Edge: edge_sig1
+  Relation: sig (signature)
+  Source: type_rel
+  Target: sig1 (a2at)
+  Description: type relation has signature any-to-anyType
+
+Edge: edge_sig2
+  Relation: sig (signature)
+  Source: ml_rel
+  Target: sig2 (a2mlt)
+  Description: metaLevel relation has signature any-to-metaLevelType
+
+Edge: edge_sig5
+  Relation: sig (signature)
+  Source: nml_rel
+  Target: sig4 (mlt2mlt)
+  Description: nextMetaLevel relation has signature metaLevelType-to-metaLevelType
+
+Edge: edge_sig4
+  Relation: sig (signature)
+  Source: sig_rel
+  Target: sig5 (mr2mrs)
+  Description: signature relation has signature metaRelation-to-metaRelationSignature
+
+Edge: edge_sig8
+  Relation: sig (signature)
+  Source: sig_rel
+  Target: sig3 (mnt2mnt)
+  Description: signature relation also has signature metaNType-to-metaNType
+
+Edge: edge_sig7
+  Relation: sig (signature)
+  Source: st_rel
+  Target: sig6 (mrs2mt)
+  Description: sourceType relation has signature metaRelationSignature-to-metaType
+
+Edge: edge_sig9
+  Relation: sig (signature)
+  Source: tt_rel
+  Target: sig6 (mrs2mt)
+  Description: targetType relation has signature metaRelationSignature-to-metaType
+
+Edge: n-5-sT_MfarnOfueAIsK-5
+  Relation: sig (signature)
+  Source: st_rel
+  Target: sig3 (mnt2mnt)
+  Description: sourceType relation also has signature metaNType-to-metaNType
+
+Edge: n-5-sT_MfarnOfueAIsK-6
+  Relation: sig (signature)
+  Source: tt_rel
+  Target: sig3 (mnt2mnt)
+  Description: targetType relation also has signature metaNType-to-metaNType
+
+Edge: y8TMbiYartTCWvdmmpqS-93
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-90 (rpr)
+  Target: y8TMbiYartTCWvdmmpqS-92 (rs2rp)
+  Description: relationPropertyRelation has signature relationSignature-to-relationProperty
+
+Edge: y8TMbiYartTCWvdmmpqS-72
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-36 (tc)
+  Target: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Description: targetClass has signature relationSignature-to-class
+
+Edge: y8TMbiYartTCWvdmmpqS-75
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-37 (sc)
+  Target: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Description: sourceClass has signature relationSignature-to-class
+
+Edge: y8TMbiYartTCWvdmmpqS-59
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-38 (inh)
+  Target: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Description: inheritance has signature class-to-class
+
+Edge: y8TMbiYartTCWvdmmpqS-66
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-57 (ith)
+  Target: y8TMbiYartTCWvdmmpqS-140 (r2r)
+  Description: inverseTransitiveHull has signature relation-to-relation
+
+Edge: y8TMbiYartTCWvdmmpqS-55
+  Relation: sig (signature)
+  Source: y8TMbiYartTCWvdmmpqS-52 (supc)
+  Target: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Description: superClass has signature class-to-class
+
+================================================================================
+EDGE DEFINITIONS - SOURCETYPE RELATIONS (BLUE #0000FF)
+================================================================================
+
+Edge: edge_st3
+  Relation: st (sourceType)
+  Source: sig5 (mr2mrs)
+  Target: mr
+  Description: signature mr2mrs has sourceType metaRelation
+
+Edge: edge_st4
+  Relation: st (sourceType)
+  Source: sig6 (mrs2mt)
+  Target: mrs
+  Description: signature mrs2mt has sourceType metaRelationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-2
+  Relation: st (sourceType)
+  Source: sig4 (mlt2mlt)
+  Target: mlt
+  Description: signature mlt2mlt has sourceType metaLevelType
+
+Edge: n-5-sT_MfarnOfueAIsK-2
+  Relation: st (sourceType)
+  Source: sig3 (mnt2mnt)
+  Target: mnt
+  Description: signature mnt2mnt has sourceType metaNType
+
+Edge: y8TMbiYartTCWvdmmpqS-96
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-92 (rs2rp)
+  Target: mnt
+  Description: signature rs2rp has sourceType metaNType (should be rs?)
+
+Edge: y8TMbiYartTCWvdmmpqS-97
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-92 (rs2rp)
+  Target: y8TMbiYartTCWvdmmpqS-33 (rs)
+  Description: signature rs2rp has sourceType relationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-69
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Target: y8TMbiYartTCWvdmmpqS-33 (rs)
+  Description: signature rs2c has sourceType relationSignature
+
+Edge: y8TMbiYartTCWvdmmpqS-58
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Target: class
+  Description: signature c2c has sourceType class
+
+Edge: y8TMbiYartTCWvdmmpqS-142
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-140 (r2r)
+  Target: y8TMbiYartTCWvdmmpqS-32 (rel)
+  Description: signature r2r has sourceType relation
+
+Edge: y8TMbiYartTCWvdmmpqS-27
+  Relation: st (sourceType)
+  Source: y8TMbiYartTCWvdmmpqS-29 (mr2mr)
+  Target: mr
+  Description: signature mr2mr has sourceType metaRelation
+
+================================================================================
+EDGE DEFINITIONS - TARGETTYPE RELATIONS (PURPLE #AA00FF)
+================================================================================
+
+Edge: edge_tt2
+  Relation: tt (targetType)
+  Source: sig1 (a2at)
+  Target: mt
+  Description: signature a2at has targetType metaType (anyType)
+
+Edge: edge_tt3
+  Relation: tt (targetType)
+  Source: sig1 (a2at)
+  Target: mnt
+  Description: signature a2at also has targetType metaNType
+
+Edge: edge_tt5
+  Relation: tt (targetType)
+  Source: sig2 (a2mlt)
+  Target: mlt
+  Description: signature a2mlt has targetType metaLevelType
+
+Edge: edge_tt6
+  Relation: tt (targetType)
+  Source: sig3 (mnt2mnt)
+  Target: mnt
+  Description: signature mnt2mnt has targetType metaNType
+
+Edge: edge_tt7
+  Relation: tt (targetType)
+  Source: sig4 (mlt2mlt)
+  Target: mlt
+  Description: signature mlt2mlt has targetType metaLevelType
+
+Edge: edge_tt8
+  Relation: tt (targetType)
+  Source: sig5 (mr2mrs)
+  Target: mrs
+  Description: signature mr2mrs has targetType metaRelationSignature
+
+Edge: edge_tt9
+  Relation: tt (targetType)
+  Source: sig6 (mrs2mt)
+  Target: mt
+  Description: signature mrs2mt has targetType metaType
+
+Edge: y8TMbiYartTCWvdmmpqS-98
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-92 (rs2rp)
+  Target: y8TMbiYartTCWvdmmpqS-99 (rp)
+  Description: signature rs2rp has targetType relationProperty
+
+Edge: y8TMbiYartTCWvdmmpqS-28
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-29 (mr2mr)
+  Target: mr
+  Description: signature mr2mr has targetType metaRelation
+
+Edge: y8TMbiYartTCWvdmmpqS-143
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-140 (r2r)
+  Target: y8TMbiYartTCWvdmmpqS-32 (rel)
+  Description: signature r2r has targetType relation
+
+Edge: y8TMbiYartTCWvdmmpqS-61
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-57 (ith)
+  Target: y8TMbiYartTCWvdmmpqS-38 (inh)
+  Description: signature ith has targetType inheritance
+
+Edge: y8TMbiYartTCWvdmmpqS-70
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Target: class
+  Description: signature rs2c has targetType class
+
+Edge: y8TMbiYartTCWvdmmpqS-71
+  Relation: tt (targetType)
+  Source: y8TMbiYartTCWvdmmpqS-40 (c2c)
+  Target: class
+  Description: signature c2c has targetType class
+
+================================================================================
+EDGE DEFINITIONS - NEXTMETALEVEL RELATIONS (GREEN #00AA00)
+================================================================================
+
+Edge: edge_nml1
+  Relation: nml (nextMetaLevel)
+  Source: ml0
+  Target: ml1
+  Description: ml0 -> ml1
+
+Edge: edge_nml2
+  Relation: nml (nextMetaLevel)
+  Source: ml1
+  Target: ml2
+  Description: ml1 -> ml2
+
+Edge: edge_nml3
+  Relation: nml (nextMetaLevel)
+  Source: ml2
+  Target: ml3
+  Description: ml2 -> ml3
+
+Edge: edge_nml4
+  Relation: nml (nextMetaLevel)
+  Source: ml3
+  Target: mlN
+  Description: ml3 -> mlN
+
+Edge: edge_nml5
+  Relation: nml (nextMetaLevel)
+  Source: mlN
+  Target: mlN
+  Description: mlN -> mlN (self-loop, indicating N can be any value >= 3)
+
+================================================================================
+EDGE DEFINITIONS - RELATIONPROPERTY RELATIONS (YELLOW #FFFF33)
+================================================================================
+
+Edge: y8TMbiYartTCWvdmmpqS-83
+  Relation: rpr (relationPropertyRelation)
+  Source: sig4 (mlt2mlt)
+  Target: y8TMbiYartTCWvdmmpqS-78 (uni)
+  Description: signature mlt2mlt has relationProperty unique
+
+Edge: y8TMbiYartTCWvdmmpqS-84
+  Relation: rpr (relationPropertyRelation)
+  Source: sig2 (a2mlt)
+  Target: y8TMbiYartTCWvdmmpqS-89 (man)
+  Description: signature a2mlt has relationProperty mandatory
+
+Edge: y8TMbiYartTCWvdmmpqS-103
+  Relation: rpr (relationPropertyRelation)
+  Source: sig1 (a2at)
+  Target: y8TMbiYartTCWvdmmpqS-89 (man)
+  Description: signature a2at has relationProperty mandatory
+
+Edge: y8TMbiYartTCWvdmmpqS-105
+  Relation: rpr (relationPropertyRelation)
+  Source: y8TMbiYartTCWvdmmpqS-39 (rs2c)
+  Target: y8TMbiYartTCWvdmmpqS-89 (man)
+  Description: signature rs2c has relationProperty mandatory
+
+================================================================================
+STRUCTURAL SUMMARY
+================================================================================
+
+METALEVEL HIERARCHY:
+  ml0 -> ml1 -> ml2 -> ml3 -> mlN -> mlN (self-loop)
+
+TYPE HIERARCHY (via type relation):
+  Layer 0 (ml=3):
+    - mnt (self-typed)
+    - mt
+    - mr
+    - mrs
+    - rp
+    - mlt
+
+  Layer 1 (ml=2):
+    - class : mt
+    - rel : mt
+    - rs : mt
+    - ml0, ml1, ml2, ml3, mlN : mlt
+    - tc, sc, inh, supc, ith : mr
+    - c2c, rs2c, r2r, mr2mr, ith : mrs
+    - man, uni : rp
+
+SIGNATURE SYSTEM:
+  Each signature defines allowed source->target patterns:
+    - a2at: any -> {mt, mnt} (mandatory)
+    - a2mlt: any -> mlt (mandatory)
+    - mlt2mlt: mlt -> mlt (unique)
+    - mrs2mt: mrs -> mt
+    - mnt2mnt: mnt -> mnt
+    - mr2mrs: mr -> mrs
+    - rs2rp: rs -> rp
+    - c2c: class -> class
+    - rs2c: rs -> class (mandatory)
+    - r2r: rel -> rel
+    - mr2mr: mr -> mr
+
+RELATION PROPERTIES:
+  - a2at: mandatory
+  - a2mlt: mandatory
+  - mlt2mlt: unique
+  - rs2c: mandatory
+
+VISIBILITY BY SHAPE:
+  Rectangle (public - visible to all following layers): 29 nodes
+  Hexagon (public+1 - visible to next layer only): 8 nodes
+  Ellipse (private - visible within layer only): 66 nodes
+
+GROUNDING STRUCTURE:
+  - 59 grounding nodes (ml=1) provide concrete instances (+4 from previous)
+  - Organized in tree rooted at "grounding root"
+  - Major subsystems: persistence, grounding relations, meta-level-hierarchy,
+    type safety, constraints, versioning
+  - Connect Layer 0, Layer 1, and Layer 2 nodes to their grounding definitions
+
+================================================================================
+GROUNDING LAYER EDGE CONNECTIVITY ISSUES
+================================================================================
+
+ANALYSIS DATE: Based on current state of complete-graph-with-grounding.drawio
+STATUS: Partially fixed - valence-constraints now connected, 8 issues remain
+
+SUMMARY STATISTICS:
+-------------------
+- Total grounding nodes: 59 (+4 from previous analysis)
+- Total edges: 234 (all valid, no dangling edges)
+- Grounding nodes with incoming edges: 51
+- Grounding nodes WITHOUT incoming edges: 8 labeled orphans + 2 unlabeled
+- Critical orphaned nodes (labeled): 8 (was 7, added 2 new, fixed 1)
+
+VALIDATION RESULTS:
+-------------------
+✓ All edge source/target node IDs exist (no dangling edges found)
+✓ No edges pointing to non-existent nodes
+✓ Total edges: 234 (all valid)
+✗ 8 grounding concepts lack incoming edges (disconnected from hierarchy)
+
+FIXED ISSUES:
+-------------
+✓ ISSUE #1 FIXED: "valence-constraints" (y8TMbiYartTCWvdmmpqS-318)
+  - Previously: NO INCOMING EDGES
+  - NOW: Has incoming edge from "constraints" node
+  - Status: Properly connected to hierarchy ✓
+
+REMAINING CRITICAL ISSUES - ORPHANED GROUNDING NODES:
+------------------------------------------------------
+These 8 labeled grounding nodes have NO incoming edges, meaning they are
+disconnected from the grounding hierarchy tree. They point to implementation
+nodes but are never referenced by parent concepts.
+
+ISSUE #1: Orphaned "unique" grounding node
+  Node ID: y8TMbiYartTCWvdmmpqS-319
+  Label: "unique"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "valence-constraints"
+  Current Outgoing Edge:
+    → y8TMbiYartTCWvdmmpqS-78 (uni)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+
+ISSUE #2: Orphaned "class type" grounding node
+  Node ID: y8TMbiYartTCWvdmmpqS-322
+  Label: "class type"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "metalevel 1 types" or similar parent
+  Current Outgoing Edge:
+    → class (class)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+
+ISSUE #3: Orphaned "version node" grounding node
+  Node ID: y8TMbiYartTCWvdmmpqS-345
+  Label: "version node"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "structure node types"
+  Current Outgoing Edge:
+    → y8TMbiYartTCWvdmmpqS-234 (vn)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+  Note: Similar to "layer node", "package node", "sheet node" which ARE
+        properly connected to "structure node types"
+
+ISSUE #4: Orphaned "description node" grounding node
+  Node ID: y8TMbiYartTCWvdmmpqS-346
+  Label: "description node"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "structure node types" or similar
+  Current Outgoing Edge:
+    → y8TMbiYartTCWvdmmpqS-236 (dn)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+
+ISSUE #5: Orphaned "description relation" grounding node
+  Node ID: y8TMbiYartTCWvdmmpqS-336
+  Label: "description relation"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "structure relations"
+  Current Outgoing Edge:
+    → y8TMbiYartTCWvdmmpqS-252 (descr)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+  Note: Similar to "refers relation", "contains relation", "version relation"
+        which ARE properly connected to "structure relations"
+
+ISSUE #6: Orphaned "implicit" grounding node
+  Node ID: 4rcjDRaJ5Oi-6SsU8W6B-36
+  Label: "implicit"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "valence-constraints"
+  Current Outgoing Edge:
+    → 4rcjDRaJ5Oi-6SsU8W6B-27 (imp)
+  Pattern: Grounding concept → implementation, but concept is orphaned
+  Note: Similar to "mandatory", "unique", "transient" relation properties
+
+ISSUE #7: NEW - Orphaned "dependency relation" grounding node
+  Node ID: u1BSAORf5U8P7rD-U4eb-7
+  Label: "dependency relation"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "structure relations" or similar parent
+  Current Outgoing Edge:
+    → Target node (dep)
+  Pattern: Newly added grounding concept, not yet integrated into hierarchy
+  Note: This is a new addition not present in previous analysis
+
+ISSUE #8: NEW - Orphaned "nextLayer relation" grounding node
+  Node ID: u1BSAORf5U8P7rD-U4eb-8
+  Label: "nextLayer relation"
+  Problem: NO INCOMING EDGES (0 in, 1 out)
+  Expected: Should be connected from "structure relations" or similar parent
+  Current Outgoing Edge:
+    → Target node (nl)
+  Pattern: Newly added grounding concept, not yet integrated into hierarchy
+  Note: This is a new addition not present in previous analysis
+
+EDGE PATTERN ANALYSIS:
+----------------------
+Properly Connected Pattern (Example: "mandatory"):
+  constraints (root)
+    → valence-constraints (NOW CONNECTED ✓)
+      → mandatory (grounding)
+        → man (implementation)
+
+Properly Connected Pattern (Example: "valence-constraints"):
+  constraints (root)
+    → valence-constraints ✓ FIXED
+      → mandatory, relation property type, transient
+
+Broken Pattern (Issue #1 - "unique"):
+  valence-constraints (orphaned)
+    → ??? MISSING CONNECTION ???
+      unique (ORPHANED)
+        → uni (implementation)
+
+Broken Pattern (Issue #4 - "version node"):
+  structure node types (has: layer node, package node, sheet node)
+    → ??? MISSING CONNECTION ???
+      version node (ORPHANED)
+        → vn (implementation)
+
+Broken Pattern (Issue #6 - "description relation"):
+  structure relations (has: refers relation, contains relation, version relation)
+    → ??? MISSING CONNECTION ???
+      description relation (ORPHANED)
+        → descr (implementation)
+
+RECOMMENDED FIXES (NOT YET APPLIED):
+-------------------------------------
+✓ FIXED: Add edge: constraints → valence-constraints [COMPLETED]
+
+Remaining fixes needed:
+
+1. Add edge: valence-constraints → unique
+
+2. Add edge: metalevel 1 types → class type
+   OR: Create new grouping node for level 1 types
+
+3. Add edge: structure node types → version node
+
+4. Add edge: structure node types → description node
+   OR: Add to existing structure relations group
+
+5. Add edge: structure relations → description relation
+
+6. Add edge: valence-constraints → implicit
+
+7. NEW: Add edge: structure relations → dependency relation
+
+8. NEW: Add edge: structure relations → nextLayer relation
+
+ADDITIONAL UNLABELED ORPHANS:
+-----------------------------
+2 additional unlabeled grounding nodes have no incoming edges.
+(Down from 88 in previous analysis - significant improvement)
+
+INTEGRITY CHECK:
+----------------
+✓ No edges have invalid source node IDs
+✓ No edges have invalid target node IDs
+✓ All mxCell references are valid (234 total edges)
+✓ No dangling edge references found
+✓ valence-constraints now properly connected
+✗ Grounding hierarchy still has 8 disconnected labeled nodes
+✗ Some concepts defined but not integrated into tree structure
+
+IMPACT ASSESSMENT:
+------------------
+IMPROVEMENTS:
+- valence-constraints FIXED - now properly connected to constraints root
+- Significant reduction in unlabeled orphans (88 → 2)
+- Overall graph integrity improved
+
+REMAINING ISSUES:
+- 8 orphaned labeled nodes represent incomplete grounding definitions
+- These concepts exist and point to implementations correctly
+- However, they are not reachable from the "grounding root" node
+- This breaks the expected tree structure where all concepts should trace
+  back to the root
+- Query operations starting from root would not find these concepts
+- Graph traversal algorithms would not reach these nodes
+- 2 new orphaned nodes added (dependency relation, nextLayer relation) need
+  to be integrated into the structure
+
+================================================================================
+INCONSISTENCIES BETWEEN DRAWIO AND SHEET DEFINITIONS
+================================================================================
+
+ANALYSIS: Comparing complete-graph-with-grounding.drawio with sheets/types.sheet
+
+FILE: sheets/types.sheet
+LOCATION: /Users/jakneissler/git/github/trigraph/trigraph-layer0-metametameta/sheets/types.sheet
+
+CRITICAL INCONSISTENCIES:
+-------------------------
+
+INCONSISTENCY #1: metaType visibility mismatch
+  Sheet Definition (types.sheet line 18):
+    public+1:
+      metaType: type of nodes on meta level 2 which represent types...
+                this node is on meta level 3
+
+  Drawio Implementation:
+    Node: mt (metaType)
+    Shape: ellipse
+    Visibility: private (ellipse = private visibility)
+
+  Expected: hexagon (public+1 visibility)
+  Actual: ellipse (private visibility)
+
+  ISSUE: Sheet declares metaType as public+1, but diagram shows it as private
+
+  IMPACT: This affects which layers can reference metaType. If it's truly
+          public+1, it should be visible to the following layer. If private,
+          it's only visible within its own layer (ml=3).
+
+INCONSISTENCY #2: metaLevelType visibility mismatch
+  Sheet Definition (types.sheet line 19):
+    public+1:
+      metaLevelType: type of meta level marker nodes
+
+  Drawio Implementation:
+    Node: mlt (metaLevelType)
+    Shape: ellipse
+    Visibility: private (ellipse = private visibility)
+
+  Expected: hexagon (public+1 visibility)
+  Actual: ellipse (private visibility)
+
+  ISSUE: Sheet declares metaLevelType as public+1, but diagram shows it as
+         private
+
+  IMPACT: Affects visibility of the metaLevelType to following layers.
+
+CORRECT IMPLEMENTATIONS:
+------------------------
+
+✓ relationProperty (rp):
+  Sheet: public+1 (line 20)
+  Drawio: hexagon (public+1 visibility)
+  Status: CONSISTENT ✓
+
+✓ metaNType (mnt):
+  Sheet: private (line 22)
+  Drawio: ellipse (private visibility)
+  Status: CONSISTENT ✓
+
+✓ metaRelation (mr):
+  Sheet: Not explicitly listed for visibility, but implied public
+  Drawio: hexagon (public+1 visibility)
+  Note: mr is a metaRelation, metaRelations should be public+1 based on pattern
+
+✓ metaRelationSignature (mrs):
+  Sheet: public (line 16)
+  Drawio: hexagon (public+1 visibility)
+  Note: Slight discrepancy - sheet says "public" but drawio is "public+1"
+        This may be intentional or another inconsistency
+
+VISIBILITY SUMMARY FROM types.sheet:
+------------------------------------
+Public (visible to all following layers):
+  - class (ml=2) ✓
+  - relation (ml=2) ✓
+  - relationSignature (ml=2) ✓
+  - metaRelation (ml=3) [actually public+1 in diagram]
+  - metaRelationSignature (ml=3) [actually public+1 in diagram]
+
+Public+1 (visible to following layer only):
+  - metaType (ml=3) ✗ INCONSISTENT - shows as private in diagram
+  - metaLevelType (ml=3) ✗ INCONSISTENT - shows as private in diagram
+  - relationProperty (ml=3) ✓ CONSISTENT
+
+Private (visible to this layer only):
+  - metaNType (ml=N) ✓ CONSISTENT
+
+RECOMMENDED ACTIONS:
+--------------------
+1. DECIDE: Should metaType be public+1 (hexagon) or private (ellipse)?
+   - If public+1: Change mt shape from ellipse to hexagon in drawio
+   - If private: Update types.sheet to move metaType from public+1 to private
+
+2. DECIDE: Should metaLevelType be public+1 (hexagon) or private (ellipse)?
+   - If public+1: Change mlt shape from ellipse to hexagon in drawio
+   - If private: Update types.sheet to move metaLevelType from public+1 to private
+
+3. REVIEW: metaRelation and metaRelationSignature visibility
+   - Sheet lists them as "public" but diagram shows "public+1"
+   - Clarify intended visibility and update documentation
+
+4. CREATE: Comprehensive visibility spec document
+   - Document the intended visibility for all Layer 0 nodes
+   - Ensure consistency between sheets and diagrams
+   - Add visibility validation rules
+
+ARCHITECTURAL CONSIDERATION:
+----------------------------
+The visibility inconsistencies suggest that the original design may have
+changed during implementation, or there may be a misunderstanding of the
+visibility rules. This needs to be resolved to ensure:
+  - Proper access control between meta-levels
+  - Correct type checking at different levels
+  - Consistent implementation across the system
+
+================================================================================
+END OF DOCUMENT
+================================================================================
