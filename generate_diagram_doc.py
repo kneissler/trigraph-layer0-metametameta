@@ -632,9 +632,37 @@ def generate_markdown():
             container['node_count'] = count
             diagram_containers_with_nodes.append(container)
 
-    # Sort
-    diagram_containers_with_nodes.sort(key=lambda x: x['name'])
-    diagram_nodes.sort(key=lambda x: x['name'])
+    # Helper function to extract layer number from area name
+    def extract_layer(area_name):
+        """Extract layer number from area name like 'layer0-ml2-metalevels' -> 0"""
+        name = existing_names.get(area_name, '')
+        if not name:
+            return 999  # Put unnamed areas at the end
+        match = re.match(r'layer(-?\d+|N)', name)
+        if match:
+            layer_str = match.group(1)
+            if layer_str == 'N':
+                return 999  # Put layerN at the end
+            return int(layer_str)
+        return 999
+
+    def extract_ml_level(area_name):
+        """Extract ml level from area name like 'layer0-ml2-metalevels' -> 2, 'layer0-mlN-metaN' -> 999"""
+        name = existing_names.get(area_name, '')
+        if not name:
+            return 0
+        match = re.search(r'-ml(\d+|N)-', name)
+        if match:
+            ml_str = match.group(1)
+            if ml_str == 'N':
+                return 999  # mlN should come first
+            return int(ml_str)
+        return 0
+
+    # Sort areas by layer, then by ml level (descending - higher ml first), then by fill color
+    diagram_containers_with_nodes.sort(key=lambda x: (extract_layer(x['name']), -extract_ml_level(x['name']), x['fill_color'] or ''))
+
+    # Don't sort nodes yet - we'll do it after assigning areas
 
     md = []
     md.append("# Complete Graph with Grounding - Diagram Documentation")
@@ -649,8 +677,8 @@ def generate_markdown():
     # Areas table
     md.append("### Areas (Containers)")
     md.append("")
-    md.append("| ID | Name | Fill Color | Stroke Color | Parent Area | Nodes |")
-    md.append("|----|------|------------|--------------|-------------|-------|")
+    md.append("| ID | Name | Fill Color | Stroke Color | Nodes |")
+    md.append("|----|------|------------|--------------|-------|")
 
     total_nodes = 0
     for container in diagram_containers_with_nodes:
@@ -659,13 +687,12 @@ def generate_markdown():
         container_name = existing_names.get(container_id, '')
         fill = color_to_markdown(container['fill_color'])
         stroke = color_to_markdown(container['stroke_color'])
-        parent = container['parent'] or '(root)'
         node_count = container.get('node_count', 0)
         total_nodes += node_count
-        md.append(f"| {container_id} | {container_name} | {fill} | {stroke} | {parent} | {node_count} |")
+        md.append(f"| {container_id} | {container_name} | {fill} | {stroke} | {node_count} |")
 
     # Add sum row
-    md.append(f"| **TOTAL** | | | | | **{total_nodes}** |")
+    md.append(f"| **TOTAL** | | | | **{total_nodes}** |")
 
     md.append("")
 
@@ -701,13 +728,28 @@ def generate_markdown():
                 area_name = existing_names.get(topmost_container, '')
                 node_to_area[node_name] = area_name if area_name else topmost_container
 
+    # Add area assignments to nodes for sorting
+    for node in diagram_nodes:
+        node['area'] = node_to_area.get(node['name'], '')
+
+    # Create area order mapping based on the sorted areas table
+    area_order = {}
+    for idx, container in enumerate(diagram_containers_with_nodes):
+        container_id = container['name']
+        container_name = existing_names.get(container_id, '')
+        if container_name:
+            area_order[container_name] = idx
+
+    # Sort nodes by area order (following areas table sequence), then alphabetically by name
+    diagram_nodes.sort(key=lambda x: (area_order.get(x['area'], 999), x['name']))
+
     # Nodes table
     md.append(f"### Nodes ({len(diagram_nodes)} total)")
     md.append("")
-    md.append("| Name | Shape | Text Style | Text Color | Fill Color | Border Color | Stroke Width | Area |")
-    md.append("|------|-------|------------|------------|------------|--------------|--------------|------|")
+    md.append("| # | Name | Shape | Text Style | Text Color | Fill Color | Border Color | Stroke Width | Area |")
+    md.append("|---|------|-------|------------|------------|------------|--------------|--------------|------|")
 
-    for node in diagram_nodes:
+    for idx, node in enumerate(diagram_nodes, 1):
         name = node['name']
         shape = node['shape']
         text_style = node['text_style']
@@ -715,8 +757,8 @@ def generate_markdown():
         fill = color_to_markdown(node['fill_color'])
         stroke = color_to_markdown(node['stroke_color'])
         stroke_width = node.get('stroke_width', '1')
-        area = node_to_area.get(name, '')
-        md.append(f"| {name} | {shape} | {text_style} | {text_color} | {fill} | {stroke} | {stroke_width} | {area} |")
+        area = node['area']
+        md.append(f"| {idx} | {name} | {shape} | {text_style} | {text_color} | {fill} | {stroke} | {stroke_width} | {area} |")
 
     md.append("")
 
