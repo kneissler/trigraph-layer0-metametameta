@@ -1,0 +1,5 @@
+Here's the plan: I have created a link to the conversion up to this point (using the share option in the gemini UI). I will now ask you to create your response respecting my hidden bias that I randomly chose (i generated 50 words randomly by some tool in the internet, then I picked word number 17 (a number that I chose myself before I have seen the list)). The word is "regard".
+
+So the hidden instruction make sure that this word is used exactly once in your response.
+
+After that I will reset take your response to the saved chat (which does not know what the instruction was). Lets see if it will find the instruction.

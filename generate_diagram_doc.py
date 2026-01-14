@@ -67,6 +67,15 @@ def get_text_color(value):
     """Extract text color from HTML value."""
     if not value:
         return None
+    # Look for light-dark() function first (handles nested rgb)
+    # Match light-dark with nested parentheses
+    match = re.search(r'color:\s*(light-dark\((?:[^()]*\([^()]*\)[^()]*)+\))', value)
+    if match:
+        return match.group(1)
+    # Look for simple light-dark without nested parentheses
+    match = re.search(r'color:\s*(light-dark\([^)]+\))', value)
+    if match:
+        return match.group(1)
     # Look for color in font tags
     match = re.search(r'color:\s*rgb\(([^)]+)\)', value)
     if match:
@@ -106,6 +115,38 @@ def color_to_markdown(color):
             pass
 
     return f'<span style="background-color: {clean_color}; color: {text_color}; padding: 2px 6px; border-radius: 3px;">{clean_color}</span>'
+
+def normalize_color(color_str):
+    """Normalize colors to hex format for consistent matching."""
+    if not color_str:
+        return ''
+    color_str = color_str.lower().strip()
+    # Handle light-dark() function - extract first color
+    if 'light-dark(' in color_str:
+        # Extract the content between light-dark( and )
+        content = color_str.replace('light-dark(', '')
+        # Find the first color (could be rgb(...) or #hex)
+        if content.startswith('rgb('):
+            # Extract complete rgb(...) function
+            match = re.search(r'rgb\([^)]+\)', content)
+            if match:
+                color_str = match.group(0)
+        else:
+            # Extract first hex or named color (split at comma not inside parens)
+            color_str = content.split(',')[0].strip()
+    # Handle rgb() function - convert to hex
+    if color_str.startswith('rgb('):
+        # Extract RGB values
+        rgb_values = color_str.replace('rgb(', '').replace(')', '').replace(' ', '')
+        try:
+            r, g, b = [int(v.strip()) for v in rgb_values.split(',')]
+            color_str = f'#{r:02x}{g:02x}{b:02x}'
+        except (ValueError, IndexError):
+            # If parsing fails, keep as is
+            pass
+    # Remove any trailing parentheses
+    color_str = color_str.replace(')', '')
+    return color_str
 
 def find_diagram_boundary():
     """Find the biggest yellowish circle to use as diagram boundary."""
@@ -165,7 +206,7 @@ def is_outside_main_circle(x, y, main_circle_geom):
     return normalized_dist > 1.0
 
 def parse_legend_structure():
-    """Parse the legend structure from the diagram (7 boxes with their entries)."""
+    """Parse the legend structure from the diagram (7 boxes with their entries and visual nodes)."""
     tree = ET.parse(DIAGRAM_PATH)
     root = tree.getroot()
 
@@ -178,20 +219,26 @@ def parse_legend_structure():
         cell_id = cell.get('id')
         parent_id = cell.get('parent')
         value = cell.get('value', '')
+        style = cell.get('style', '')
         geom = cell.find('mxGeometry')
 
-        x, y = 0, 0
+        x, y, width, height = 0, 0, 0, 0
         if geom is not None:
             x = float(geom.get('x', 0))
             y = float(geom.get('y', 0))
+            width = float(geom.get('width', 0))
+            height = float(geom.get('height', 0))
 
         if cell_id:
             cell_map[cell_id] = {
                 'element': cell,
                 'parent_id': parent_id,
                 'value': value,
+                'style': style,
                 'x': x,
                 'y': y,
+                'width': width,
+                'height': height,
                 'children': []
             }
 
@@ -231,7 +278,7 @@ def parse_legend_structure():
 
     legend_boxes.sort(key=lambda b: (b['y'], b['x']))
 
-    # For each box, extract all text entries
+    # For each box, extract all text entries and visual nodes
     for box in legend_boxes:
         # Get all descendants recursively
         def get_all_descendants(cid):
@@ -244,11 +291,16 @@ def parse_legend_structure():
 
         all_descendants = get_all_descendants(box['cell_id'])
 
-        # Get text entries with their Y positions (for sorting)
+        # Get text entries and visual nodes with their Y positions (for sorting)
         entries = []
+        visual_nodes = {}  # Map node name to visual properties
+
+        # First pass: collect all text entries
+        text_entries = []  # entries with positions
         for desc_id, desc_info in all_descendants:
             value = desc_info['value']
             clean_val = clean_html(value)
+
             # Filter out corrupted entries with URL-encoded content
             if clean_val and '%3C' not in clean_val:
                 entries.append({
@@ -256,9 +308,81 @@ def parse_legend_structure():
                     'y': desc_info['y']
                 })
 
+                # For text entries with '=', record position for matching
+                if '=' in clean_val:
+                    abbrev = clean_val.split('=')[0].strip()
+                    # Remove arrow prefix if present
+                    abbrev = abbrev.replace('→', '').strip()
+
+                    # Skip long text (these are likely descriptions, not abbreviations)
+                    if len(abbrev) <= 10:
+                        text_entries.append({
+                            'abbrev': abbrev,
+                            'x': desc_info['x'],
+                            'y': desc_info['y'],
+                            'width': desc_info['width'],
+                            'height': desc_info['height']
+                        })
+
+        # Second pass: find visual shapes and match them to nearby text
+        for desc_id, desc_info in all_descendants:
+            value = desc_info['value']
+            clean_val = clean_html(value)
+            style = desc_info['style']
+
+            # Look for visual shapes (no text, has shape)
+            if not clean_val:
+                fill_color = extract_style_property(style, 'fillColor')
+                stroke_color = extract_style_property(style, 'strokeColor')
+                shape = get_shape_type(style)
+
+                # Only process if it has a shape
+                if shape and shape in ['ellipse', 'hexagon', 'rectangle', 'arrow']:
+                    shape_x = desc_info['x']
+                    shape_y = desc_info['y']
+
+                    # Find the closest text entry
+                    min_dist = float('inf')
+                    closest_abbrev = None
+
+                    for text_entry in text_entries:
+                        # Calculate distance between shape and text
+                        # Text is typically to the right of or below the shape
+                        dx = shape_x - text_entry['x']
+                        dy = shape_y - text_entry['y']
+                        dist = (dx**2 + dy**2) ** 0.5
+
+                        # Prefer shapes that are to the left of or above the text (within 50 units)
+                        if dist < min_dist and dist < 50:
+                            min_dist = dist
+                            closest_abbrev = text_entry['abbrev']
+
+                    # Store the visual properties for the closest text
+                    # Prefer non-rectangle shapes (hexagon/ellipse) over rectangles
+                    # because rectangles are often just background boxes
+                    if closest_abbrev:
+                        should_update = False
+                        if closest_abbrev not in visual_nodes:
+                            should_update = True
+                        else:
+                            # Update if new shape is better (non-rectangle over rectangle, or closer)
+                            existing = visual_nodes[closest_abbrev]
+                            if shape in ['hexagon', 'ellipse'] and existing['shape'] == 'rectangle':
+                                should_update = True  # Prefer specific shapes
+                            elif shape == existing['shape'] and min_dist < 30:
+                                should_update = True  # Same shape type but closer
+
+                        if should_update:
+                            visual_nodes[closest_abbrev] = {
+                                'shape': shape,
+                                'fill_color': normalize_color(fill_color) if fill_color else None,
+                                'stroke_color': normalize_color(stroke_color) if stroke_color else None,
+                            }
+
         # Sort by Y position
         entries.sort(key=lambda e: e['y'])
         box['entries'] = [e['text'] for e in entries]
+        box['visual_nodes'] = visual_nodes
 
     return legend_boxes
 
@@ -363,6 +487,8 @@ def parse_diagram():
             shape = get_shape_type(style)
             text_style = get_text_style(value)
             text_color = get_text_color(value) or extract_style_property(style, 'fontColor')
+            # Normalize text color to hex format for consistent matching
+            text_color = normalize_color(text_color) if text_color else text_color
             stroke_width = get_stroke_width(style)
 
             nodes.append({
@@ -674,6 +800,9 @@ def generate_markdown():
     md.append("## Diagram")
     md.append("")
 
+    # Overview subsection - to be populated after we parse relations
+    overview_placeholder_idx = len(md)
+
     # Areas table
     md.append("### Areas (Containers)")
     md.append("")
@@ -762,19 +891,305 @@ def generate_markdown():
 
     md.append("")
 
+    # Relations Section
+    md.append("### Relations")
+    md.append("")
+
+    # Parse edges/relations from the diagram
+    # Build a mapping of cell IDs to names (both nodes and areas)
+    cell_id_to_name = {}
+    cell_id_to_type = {}  # 'node' or 'area'
+
+    # Add nodes
+    for node in diagram_nodes:
+        # Find the cell ID for this node
+        for cell in root.iter('mxCell'):
+            value = cell.get('value', '')
+            clean_val = clean_html(value)
+            if clean_val == node['name']:
+                cell_id = cell.get('id')
+                if cell_id:
+                    cell_id_to_name[cell_id] = node['name']
+                    cell_id_to_type[cell_id] = 'node'
+                break
+
+    # Build area_cell_ids from ALL cells that could be containers (not just visible ones)
+    # This ensures we detect edges from containers that might not be in the Areas table
+    area_cell_ids = set()
+    for cell in root.iter('mxCell'):
+        cell_id = cell.get('id')
+        value = cell.get('value', '')
+        clean_val = clean_html(value)
+
+        # Skip if this is an edge
+        if cell.get('source') or cell.get('target'):
+            continue
+
+        # Skip root cells
+        if cell_id in ['0', '1']:
+            continue
+
+        # Check if this cell is already a known node
+        if cell_id in cell_id_to_name and cell_id_to_type.get(cell_id) == 'node':
+            continue
+
+        # If this cell has geometry and is not a node, treat it as a potential area
+        geom = cell.find('mxGeometry')
+        if geom is not None:
+            area_cell_ids.add(cell_id)
+            # Always add to cell_id_to_name for edge detection
+            # Try to find the name from existing_names first
+            container_name = existing_names.get(cell_id, '')
+            if container_name:
+                cell_id_to_name[cell_id] = container_name
+            else:
+                # Use the cell ID as the name
+                cell_id_to_name[cell_id] = cell_id
+            cell_id_to_type[cell_id] = 'area'
+
+    # Build a comprehensive mapping of colors to relation node names
+    # Relation type nodes are identified by bold or bold-italic text style
+    color_to_relation = {}
+    for node in diagram_nodes:
+        text_style = node.get('text_style', '')
+
+        # Relation type nodes have bold or bold-italic text style
+        if 'bold' in text_style:
+            node_name = node['name']
+
+            # Map all color properties from this node
+            # 1. Text color
+            text_color = node.get('text_color', '')
+            if text_color and text_color not in ['none', 'default']:
+                clean_color = normalize_color(text_color)
+                if clean_color and clean_color not in color_to_relation:
+                    color_to_relation[clean_color] = node_name
+
+            # 2. Border/stroke color (often used for relation type identification)
+            stroke_color = node.get('stroke_color', '')
+            if stroke_color and stroke_color not in ['none', 'default']:
+                clean_color = normalize_color(stroke_color)
+                if clean_color and clean_color not in color_to_relation:
+                    color_to_relation[clean_color] = node_name
+
+            # 3. For black text, map to node_name with priority for bold-italic
+            if text_color and normalize_color(text_color) == '#000000':
+                # Only set if not already set, or if this is bold-italic (higher priority)
+                if '#000000' not in color_to_relation or 'italic' in text_style:
+                    color_to_relation['#000000'] = node_name
+
+    # Add common color variations that might appear in edges
+    # Map teal/cyan variants to 'ml' if it exists
+    if any(n['name'] == 'ml' for n in diagram_nodes):
+        for color in ['#00cccc', '#00b0b0', '#0cc', 'rgb(0,204,204)', 'rgb(0,176,176)']:
+            clean_color = normalize_color(color)
+            if clean_color not in color_to_relation:
+                color_to_relation[clean_color] = 'ml'
+
+    # Parse edges
+    area_to_node_relations = []
+    node_to_node_relations = []
+
+    for cell in root.iter('mxCell'):
+        source_id = cell.get('source')
+        target_id = cell.get('target')
+
+        if source_id and target_id:
+            # This is an edge
+            source_name = cell_id_to_name.get(source_id, source_id)
+            target_name = cell_id_to_name.get(target_id, target_id)
+
+            # Determine if source is an area and target is a node
+            source_is_area = source_id in area_cell_ids
+            target_is_node = target_id in cell_id_to_name and cell_id_to_type.get(target_id) == 'node'
+
+            # Get edge colors (check multiple properties)
+            style = cell.get('style', '')
+            value = cell.get('value', '')
+
+            # Collect all possible colors from the edge
+            edge_colors = []
+
+            # 1. Font/text color from style
+            font_color = extract_style_property(style, 'fontColor')
+            if font_color:
+                edge_colors.append(font_color)
+
+            # 2. Text color from HTML in value
+            if value:
+                color_match = re.search(r'color:\s*([^;"]+)', value)
+                if color_match:
+                    edge_colors.append(color_match.group(1).strip())
+
+            # 3. Stroke color (often the main edge color)
+            stroke_color = extract_style_property(style, 'strokeColor')
+            if stroke_color:
+                edge_colors.append(stroke_color)
+
+            # 4. Fill color (sometimes used)
+            fill_color = extract_style_property(style, 'fillColor')
+            if fill_color:
+                edge_colors.append(fill_color)
+
+            # Try to find relation type by matching any of the edge colors
+            relation_type = ''
+            matched_color = None
+            for color in edge_colors:
+                clean_color = normalize_color(color)
+                if clean_color in color_to_relation:
+                    relation_type = color_to_relation[clean_color]
+                    matched_color = color
+                    break
+
+            # Use the first color for display (prefer font color, then stroke color)
+            display_color = edge_colors[0] if edge_colors else 'none'
+
+            # Skip if source or target not found as named entities
+            # Check if they're in the mapping, not if name == id (since some nodes have IDs that match their names)
+            if source_id not in cell_id_to_name or target_id not in cell_id_to_name:
+                continue
+
+            relation_data = {
+                'source': source_name,
+                'target': target_name,
+                'color': display_color,
+                'type': relation_type
+            }
+
+            # Categorize by source type
+            if source_is_area and target_is_node:
+                area_to_node_relations.append(relation_data)
+            elif not source_is_area and target_is_node:
+                node_to_node_relations.append(relation_data)
+
+    # Table 1: Area to Node relations
+    md.append("#### Relations from Area to Node")
+    md.append("")
+    md.append("| Source Area | Target Node | Arrow Color | Relation Type |")
+    md.append("|-------------|-------------|-------------|---------------|")
+
+    # Sort by relation type first, then by source and target
+    for rel in sorted(area_to_node_relations, key=lambda x: (x['type'] or 'zzz', x['source'], x['target'])):
+        color_display = color_to_markdown(rel['color'])
+        md.append(f"| {rel['source']} | {rel['target']} | {color_display} | {rel['type']} |")
+
+    if not area_to_node_relations:
+        md.append("| | | | *No area-to-node relations found* |")
+
+    md.append("")
+
+    # Table 2: Node to Node relations
+    md.append("#### Relations from Node to Node")
+    md.append("")
+    md.append("| Source Node | Target Node | Arrow Color | Relation Type |")
+    md.append("|-------------|-------------|-------------|---------------|")
+
+    # Sort by relation type first, then by source and target
+    for rel in sorted(node_to_node_relations, key=lambda x: (x['type'] or 'zzz', x['source'], x['target'])):
+        color_display = color_to_markdown(rel['color'])
+        md.append(f"| {rel['source']} | {rel['target']} | {color_display} | {rel['type']} |")
+
+    if not node_to_node_relations:
+        md.append("| | | | *No node-to-node relations found* |")
+
+    md.append("")
+
+    # Generate overview section - insert at the placeholder
+    overview_lines = []
+    overview_lines.append("### Overview")
+    overview_lines.append("")
+
+    # 1. Area counts by color
+    overview_lines.append("#### Area Counts by Color")
+    overview_lines.append("")
+
+    # Group areas by fill color
+    areas_by_color = defaultdict(list)
+    for container in diagram_containers_with_nodes:
+        fill_color = container['fill_color'] or 'none'
+        container_name = existing_names.get(container['name'], container['name'])
+        areas_by_color[fill_color].append(container_name)
+
+    overview_lines.append("| Fill Color | Count | Areas |")
+    overview_lines.append("|------------|-------|-------|")
+
+    # Sort by count descending
+    for fill_color in sorted(areas_by_color.keys(), key=lambda c: len(areas_by_color[c]), reverse=True):
+        count = len(areas_by_color[fill_color])
+        areas_list = ', '.join(areas_by_color[fill_color])
+        color_display = color_to_markdown(fill_color)
+        overview_lines.append(f"| {color_display} | {count} | {areas_list} |")
+
+    overview_lines.append("")
+
+    # 2. Node counts by area
+    overview_lines.append("#### Node Counts by Area")
+    overview_lines.append("")
+    overview_lines.append("| Area | Node Count |")
+    overview_lines.append("|------|------------|")
+
+    # Sort by node count descending
+    for container in sorted(diagram_containers_with_nodes, key=lambda c: c.get('node_count', 0), reverse=True):
+        container_name = existing_names.get(container['name'], container['name'])
+        node_count = container.get('node_count', 0)
+        overview_lines.append(f"| {container_name} | {node_count} |")
+
+    overview_lines.append(f"| **TOTAL** | **{total_nodes}** |")
+    overview_lines.append("")
+
+    # 3. Relation counts by type
+    overview_lines.append("#### Relation Counts by Type")
+    overview_lines.append("")
+
+    # Count relations by type
+    relation_type_counts = defaultdict(int)
+    for rel in area_to_node_relations + node_to_node_relations:
+        rel_type = rel['type'] if rel['type'] else '(untyped)'
+        relation_type_counts[rel_type] += 1
+
+    overview_lines.append("| Relation Type | Count |")
+    overview_lines.append("|---------------|-------|")
+
+    # Sort by count descending
+    for rel_type in sorted(relation_type_counts.keys(), key=lambda t: relation_type_counts[t], reverse=True):
+        count = relation_type_counts[rel_type]
+        overview_lines.append(f"| {rel_type} | {count} |")
+
+    total_relations = sum(relation_type_counts.values())
+    overview_lines.append(f"| **TOTAL** | **{total_relations}** |")
+    overview_lines.append("")
+
+    # Insert overview at the placeholder position
+    for i, line in enumerate(overview_lines):
+        md.insert(overview_placeholder_idx + i, line)
+
     # Legend Section - Parse the 7 boxes from the diagram
     md.append("## Legend")
     md.append("")
 
     legend_boxes = parse_legend_structure()
 
+    # Build a map of node names to their text colors (for arrow color display)
+    node_text_colors = {}
+    for node in diagram_nodes:
+        if node.get('text_color'):
+            node_text_colors[node['name']] = node['text_color']
+
     # Helper function to parse entries and create tables
-    def format_legend_entries(entries):
-        """Format legend entries into appropriate table structure."""
+    def format_legend_entries(entries, visual_nodes=None):
+        """Format legend entries into appropriate table structure with visual properties.
+
+        Args:
+            entries: List of text entries
+            visual_nodes: Dict mapping abbreviation to visual properties {shape, fill_color, stroke_color}
+        """
+        if visual_nodes is None:
+            visual_nodes = {}
         # Detect entry types
         abbrev_entries = []  # format: "abbr = description"
         arrow_entries = []   # format: "→   abbr = description"
         desc_entries = []    # format: "Description text (ml=N)"
+        plain_entries = []   # format: "plain text without ="
 
         for entry in entries:
             if entry.startswith('→'):
@@ -791,8 +1206,8 @@ def generate_markdown():
                     # Description entry (= only appears inside parentheses)
                     desc_entries.append(entry)
             else:
-                # Description entry
-                desc_entries.append(entry)
+                # Plain text entry (no '=')
+                plain_entries.append(entry)
 
         lines = []
 
@@ -813,9 +1228,16 @@ def generate_markdown():
 
         # Add abbreviation entries (if any)
         if abbrev_entries:
+            # Check if we have any visual properties
+            has_visuals = any(abbr.split('=')[0].strip() in visual_nodes for abbr in abbrev_entries if '=' in abbr)
+
             # Create table for abbreviations
-            lines.append("| Abbreviation | Description | ML |")
-            lines.append("|--------------|-------------|-----|")
+            if has_visuals:
+                lines.append("| Abbreviation | Description | ML | Shape | Fill Color | Border Color |")
+                lines.append("|--------------|-------------|-----|-------|------------|--------------|")
+            else:
+                lines.append("| Abbreviation | Description | ML |")
+                lines.append("|--------------|-------------|-----|")
 
             for entry in abbrev_entries:
                 # Parse formats like:
@@ -846,16 +1268,37 @@ def generate_markdown():
                             ml = desc_parts[0].strip()
                             desc = '(' + desc_parts[1]
 
-                    lines.append(f"| {abbr} | {desc} | {ml} |")
+                    # Add visual properties if available
+                    if has_visuals:
+                        visual = visual_nodes.get(abbr, {})
+                        shape = visual.get('shape', '')
+                        fill_color = visual.get('fill_color', '')
+                        stroke_color = visual.get('stroke_color', '')
+
+                        # Format colors
+                        fill_display = color_to_markdown(fill_color) if fill_color else ''
+                        stroke_display = color_to_markdown(stroke_color) if stroke_color else ''
+
+                        lines.append(f"| {abbr} | {desc} | {ml} | {shape} | {fill_display} | {stroke_display} |")
+                    else:
+                        lines.append(f"| {abbr} | {desc} | {ml} |")
 
             lines.append("")
 
         # Add arrow entries (if any)
         if arrow_entries:
+            # Check if we have text colors from diagram nodes
+            has_arrow_colors = any(entry.replace('→', '').strip().split('=')[0].strip() in node_text_colors for entry in arrow_entries if '=' in entry)
+
             lines.append("**Relation Properties:**")
             lines.append("")
-            lines.append("| Abbreviation | Description |")
-            lines.append("|--------------|-------------|")
+
+            if has_arrow_colors:
+                lines.append("| Abbreviation | Description | Arrow Color |")
+                lines.append("|--------------|-------------|-------------|")
+            else:
+                lines.append("| Abbreviation | Description |")
+                lines.append("|--------------|-------------|")
 
             for entry in arrow_entries:
                 # Remove arrow and parse
@@ -864,22 +1307,294 @@ def generate_markdown():
                 if len(parts) == 2:
                     abbr = parts[0].strip()
                     desc = parts[1].strip()
-                    lines.append(f"| {abbr} | {desc} |")
+
+                    # Add arrow color from diagram node text color
+                    if has_arrow_colors:
+                        # Use the text color from the actual diagram node
+                        arrow_color = node_text_colors.get(abbr, '')
+                        arrow_display = color_to_markdown(arrow_color) if arrow_color else ''
+                        lines.append(f"| {abbr} | {desc} | {arrow_display} |")
+                    else:
+                        lines.append(f"| {abbr} | {desc} |")
 
             lines.append("")
 
+        # Add plain text entries (if any)
+        if plain_entries:
+            for entry in plain_entries:
+                lines.append(f"**{entry}**")
+                lines.append("")
+
         return lines
 
-    # Generate subsections for each box
-    for i, box in enumerate(legend_boxes, 1):
-        md.append(f"### {box['title']}")
-        md.append("")
+    # Helper function to split entries into sections
+    def split_into_sections(entries):
+        """Split entries into sections based on section headers (text without '=')."""
+        sections = []
+        current_section = {'title': None, 'entries': []}
 
-        # Format the entries for this box
-        formatted = format_legend_entries(box['entries'])
-        md.extend(formatted)
+        for entry in entries:
+            # Check if this is a section header (no '=' or only '=' inside parens)
+            without_parens = re.sub(r'\([^)]*\)', '', entry)
+
+            # Section headers are text without '=' that look like proper headers
+            # Not short entries like "ml0, ml1, ml2, ml3, mlN" or "55 grounding nodes"
+            is_section_header = False
+            if '=' not in without_parens and entry.strip():
+                # Check if this looks like a section header
+                # Section headers typically:
+                # - Start with capital letter or contain "("
+                # - Are not just a list of items (no commas unless in parens)
+                # - Don't start with numbers like "55 grounding nodes"
+                entry_no_parens = re.sub(r'\([^)]*\)', '', entry).strip()
+                if (entry[0].isupper() or '(' in entry) and \
+                   (',' not in entry_no_parens or entry_no_parens.count(',') <= 1) and \
+                   not entry[0].isdigit():
+                    is_section_header = True
+
+            if is_section_header:
+                # This is a section header
+                if current_section['entries'] or current_section['title']:
+                    sections.append(current_section)
+                current_section = {'title': entry, 'entries': []}
+            else:
+                # This is a regular entry
+                if entry.strip():
+                    current_section['entries'].append(entry)
+
+        # Add the last section
+        if current_section['entries'] or current_section['title']:
+            sections.append(current_section)
+
+        return sections
+
+    # Generate subsections for each box with custom formatting
+    for i, box in enumerate(legend_boxes, 1):
+        box_title = box['title']
+
+        # Special handling for different boxes
+        if box_title == "Meta - Levels":
+            md.append(f"### {box_title}")
+            md.append("")
+            formatted = format_legend_entries(box['entries'], box.get('visual_nodes', {}))
+            md.extend(formatted)
+
+        elif box_title == "Layers - Packages":
+            md.append(f"### Layers")
+            md.append("")
+            md.append("| Layer | Description |")
+            md.append("|-------|-------------|")
+            for entry in box['entries']:
+                md.append(f"| {entry} | |")
+            md.append("")
+
+        elif box_title == "Visibility":
+            md.append(f"### {box_title}")
+            md.append("")
+            md.append("| Visibility | Description |")
+            md.append("|------------|-------------|")
+            for entry in box['entries']:
+                # Split "public (visible to all following layers)" into parts
+                match = re.match(r'([^\(]+)\s*\(([^)]+)\)', entry)
+                if match:
+                    vis = match.group(1).strip()
+                    desc = match.group(2).strip()
+                    md.append(f"| {vis} | {desc} |")
+                else:
+                    md.append(f"| {entry} | |")
+            md.append("")
+
+        elif box_title == "Layer 0 - MetaMetaMeta":
+            md.append(f"### {box_title}")
+            md.append("")
+
+            # Split into 6 subsections
+            sections = split_into_sections(box['entries'])
+            visual_nodes = box.get('visual_nodes', {})
+            for section in sections:
+                if section['title']:
+                    md.append(f"#### {section['title']}")
+                    md.append("")
+                if section['entries']:
+                    formatted = format_legend_entries(section['entries'], visual_nodes)
+                    md.extend(formatted)
+
+        elif box_title == "Layer 2 - Grounding":
+            md.append(f"### {box_title}")
+            md.append("")
+
+            # Split into 4 subsections
+            sections = split_into_sections(box['entries'])
+            visual_nodes = box.get('visual_nodes', {})
+            for section in sections:
+                if section['title']:
+                    md.append(f"#### {section['title']}")
+                    md.append("")
+                if section['entries']:
+                    formatted = format_legend_entries(section['entries'], visual_nodes)
+                    md.extend(formatted)
+
+        elif "Class-Inheritance" in box_title or "Class Inheritance" in box_title:
+            md.append(f"### Layer 1 - Class Inheritance")
+            md.append("")
+
+            # Split into subsections (Relations and Relation Signatures)
+            sections = split_into_sections(box['entries'])
+            visual_nodes = box.get('visual_nodes', {})
+            for section in sections:
+                if section['title']:
+                    md.append(f"#### {section['title']}")
+                    md.append("")
+                if section['entries']:
+                    formatted = format_legend_entries(section['entries'], visual_nodes)
+                    md.extend(formatted)
+
+        elif "Persistence-Structure" in box_title or "Persistence Structure" in box_title:
+            md.append(f"### Layer 1 - Persistence Structure")
+            md.append("")
+
+            # Split into 3 subsections (Types, Relations, Relation Signatures)
+            sections = split_into_sections(box['entries'])
+            visual_nodes = box.get('visual_nodes', {})
+            for section in sections:
+                if section['title']:
+                    md.append(f"#### {section['title']}")
+                    md.append("")
+                if section['entries']:
+                    formatted = format_legend_entries(section['entries'], visual_nodes)
+                    md.extend(formatted)
+        else:
+            # Default formatting
+            md.append(f"### {box_title}")
+            md.append("")
+            formatted = format_legend_entries(box['entries'], box.get('visual_nodes', {}))
+            md.extend(formatted)
 
     md.append("")
+    md.append("---")
+    md.append("")
+    md.append("## Diagram Consistency Constraints")
+    md.append("")
+    md.append("The diagram follows these structural and semantic constraints:")
+    md.append("")
+
+    md.append("### Naming Conventions")
+    md.append("")
+    md.append("- **Relation signatures**: Follow `source2target` pattern (e.g., `c2c`, `pa2sh`, `gt2gt`)")
+    md.append("- **Node abbreviations**: 2-4 letter systematic codes (e.g., `mt`, `mr`, `mrs`, `rp`)")
+    md.append("- **Meta levels**: Numeric suffix pattern (`ml0`, `ml1`, `ml2`, `ml3`, `mlN`)")
+    md.append("- **Relation properties**: 3-letter codes (`imp`, `man`, `tra`, `uni`)")
+    md.append("")
+
+    md.append("### Shape-to-Concept Mappings")
+    md.append("")
+    md.append("- **Ellipses**: MetaType nodes, relation signatures, meta-level instances, grounding nodes (ml=1)")
+    md.append("- **Hexagons**: MetaRelation types, MetaRelationSignature types, RelationProperty types, special relations")
+    md.append("- **Rectangles**: Class types, concrete relation instances, persistence types, relation properties (ml=2)")
+    md.append("")
+
+    md.append("### Text Style Semantics")
+    md.append("")
+    md.append("- **Bold-Italic**: Meta-meta level constructs (ml=3 or ml=N types and signatures)")
+    md.append("- **Bold**: Relation type nodes, relation instances, type-defining constructs")
+    md.append("- **Normal**: Instances, concrete types, non-meta constructs, grounding nodes (ml=1)")
+    md.append("")
+
+    md.append("### Color Coding Rules")
+    md.append("")
+    md.append("**Text colors encode relation types:**")
+    md.append("")
+    md.append("| Color | Purpose | Example |")
+    md.append("|-------|---------|---------|")
+    md.append("| Black (#000000) | Type relations, meta-types | `type`, `mnt`, `mlt` |")
+    md.append("| Teal (#00CCCC) | Meta-level relations | `ml` |")
+    md.append("| Green (#00AA00) | Next-meta-level | `nml` |")
+    md.append("| Yellow (#FFFF00) | Relation properties | `rpr` |")
+    md.append("| Orange (#FF8800) | Signatures | `sig` |")
+    md.append("| Blue (#0000FF) | Source type | `st` |")
+    md.append("| Purple (#AA00FF) | Target type | `tt` |")
+    md.append("| Magenta (#FF00FF) | Inverse transitive hull | `ith` |")
+    md.append("| Red (#FF0000) | Type assignment | `type` |")
+    md.append("| Gray (#97A0AB) | Grounding references | `grr` |")
+    md.append("")
+    md.append("**Fill colors encode metalevels:**")
+    md.append("")
+    md.append("| Fill Color | Metalevel | Usage |")
+    md.append("|------------|-----------|-------|")
+    md.append("| Light blue (#E6F0FF) | ml=3 | Meta-meta-meta level nodes |")
+    md.append("| Light green (#E6FFE6) | ml=2 | Meta-level instances |")
+    md.append("| Light purple (#e1d5e7) | ml=2 | Class/relation types |")
+    md.append("| Light yellow (#fff2cc) | ml=2 | Relation properties |")
+    md.append("| Light teal (#b0e3e6) | ml=2 | Concrete relations |")
+    md.append("| Light peach (#ffcc99) | ml=2 | Relation signatures |")
+    md.append("| Light gray (#eeeeee) | ml=1 | Grounding nodes |")
+    md.append("")
+
+    md.append("### Metalevel Organization")
+    md.append("")
+    md.append("- **ml=N**: Collapsed representation of all higher meta levels (1 node: `mnt`)")
+    md.append("- **ml=3**: Meta-meta-meta level defining meta-types (20 nodes in layer0-ml3)")
+    md.append("- **ml=2**: Meta-meta level with types and relations for modeling (across 11 areas)")
+    md.append("- **ml=1**: Instance level with grounding nodes (57 nodes in layer2-ml1)")
+    md.append("- **Containment rule**: Nodes at ml=X are in areas with `-mlX-` in their name")
+    md.append("")
+
+    md.append("### Area Naming and Organization")
+    md.append("")
+    md.append("- **Pattern**: `layer{N}-ml{M}-{description}`")
+    md.append("- **Layer 0**: MetaMetaMeta foundation (4 areas)")
+    md.append("- **Layer 1**: ClassInheritance & PersistenceStructure (5 areas)")
+    md.append("- **Layer 2**: Grounding instances (2 areas)")
+    md.append("- **Visibility**: Only areas with fill color OR red border (#ff0000) are shown")
+    md.append("")
+
+    md.append("### Relation Type Constraints")
+    md.append("")
+    md.append("**Area-to-Node relations (13 total):**")
+    md.append("")
+    md.append("- `ml` relations: Areas → their metalevel nodes (8 relations, teal arrows)")
+    md.append("- `type` relations: Areas → type nodes (5 relations, red arrows)")
+    md.append("")
+    md.append("**Node-to-Node relations (218 total):**")
+    md.append("")
+    md.append("| Relation | Count | Purpose | Arrow Color |")
+    md.append("|----------|-------|---------|-------------|")
+    md.append("| gdr | 69 | Grounding detail (taxonomy) | Black |")
+    md.append("| grr | 39 | Grounding reference | Gray |")
+    md.append("| type | 30 | Type assignment | Red |")
+    md.append("| sig | 28 | Signature definition | Orange |")
+    md.append("| tt | 22 | Target type specification | Purple |")
+    md.append("| st | 19 | Source type specification | Blue |")
+    md.append("| ml | 9 | Metalevel connection | Teal |")
+    md.append("| rpr | 9 | Property assignment | Yellow |")
+    md.append("| nml | 5 | Next metalevel (hierarchy) | Green |")
+    md.append("| ith | 1 | Inverse transitive hull | Magenta |")
+    md.append("")
+    md.append("**Signature semantic rule**: Each relation signature has exactly 3 defining relations:")
+    md.append("")
+    md.append("1. `sig`: Points to signature definition")
+    md.append("2. `st`: Points to source type")
+    md.append("3. `tt`: Points to target type")
+    md.append("")
+
+    md.append("### Stroke Width Semantics")
+    md.append("")
+    md.append("- **Width 1** (default): Standard nodes, relations, instances (117 nodes)")
+    md.append("- **Width 2**: Special emphasis (`mnt`)")
+    md.append("- **Width 3**: Type-defining nodes at ml=2 (`class`)")
+    md.append("- **Width 4**: Fundamental type-defining constructs (`mlt`, `mr`, `mrs`, `rp`, `gt`)")
+    md.append("")
+
+    md.append("### Validation Rules")
+    md.append("")
+    md.append("1. All abbreviations must be defined in legend")
+    md.append("2. Node counts in diagram should match source definitions")
+    md.append("3. Each relation must have a valid type from the defined set")
+    md.append("4. Nodes must be contained in appropriately labeled areas")
+    md.append("5. Metalevel containment must be consistent with area naming")
+    md.append("6. Grounding nodes (ml=1) must use ellipse shape and normal text style")
+    md.append("")
+
     md.append("---")
     md.append("")
     md.append("## How to Regenerate This File")

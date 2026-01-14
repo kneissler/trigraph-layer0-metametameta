@@ -3,6 +3,20 @@
 # MetaMetaMeta Model with Class-Inheritance and Persistence-Structure and Grounding
 # Last Updated: Based on current state of complete-graph-with-grounding.drawio
 # Status: ALL GROUNDING ISSUES RESOLVED ✓
+#
+# IMPORTANT CORRECTION:
+# Layer 0 is NOT exclusively ml=3. Layers and meta levels are distinct concepts.
+# Layer 0 contains nodes from THREE meta levels:
+#   - ml=N: 1 node (mnt - the bootstrap type)
+#   - ml=3: 18 nodes (the core meta-meta types)
+#   - ml=2: 12 nodes (includes signatures for Layer 1!)
+#       * 1: mlt (metaLevelType)
+#       * 5: ml0, ml1, ml2, ml3, mlN (metalevel markers)
+#       * 2: man, uni (relation properties)
+#       * 4: c2c, rs2c, r2r, mr2mr (Layer 1 Class-Inheritance signatures, defined in L0)
+# Total Layer 0: 31 nodes (1@ml=N + 18@ml=3 + 12@ml=2)
+# The dashed line labeled "layer 0" in the diagram encloses all 31 of these nodes.
+# The "red backgrounded area" (pink containers) contains the 3+4+5=12 ml=2 nodes.
 
 ================================================================================
 NODE COUNT SUMMARY TABLE
@@ -12,29 +26,56 @@ NODES BY METALEVEL AND KIND:
 -----------------------------
 MetaLevel  Type         Relation    Signature   RelProp    MetaLevel   Total
 ---------  ----         --------    ---------   -------    ---------   -----
-ml=3       6 (L0)       7 (L0)      7 (L0)      1 (L0)     0           21
-ml=2       9 (L1+L2)    7 (L1)      6 (L1+L2)   2          5           29
+ml=N       1 (L0)       0           0           0          0           1
+ml=3       4 (L0)       7 (L0)      7 (L0)      0          0           18
+ml=2       9 (L0+L1+L2) 7 (L1+L2)   6 (L0+L1+L2) 2 (L0)    5 (L0)      29
 ml=1       0            0           0           0          0           58
 ---------  ----         --------    ---------   -------    ---------   -----
-Total:     15           14          13          3          5           108
+Total:     14           14          13          2          5           106
+
+Notes:
+- The 9 Types at ml=2 include: mlt(L0), class,rel,rs(L1), lay,pac,sh,vn(L1), gt(L2)
+- The 6 Signatures at ml=2 include: c2c,rs2c,r2r,mr2mr(L0!), gt2gt,gt2a(L2)
+- The 2 RelProp at ml=2 (man,uni) belong to Layer 0, not Layer 1
+- The 5 MetaLevel nodes (ml0-mlN) at ml=2 belong to Layer 0
+- Layer 1 signatures (c2c,rs2c,r2r,mr2mr) are DEFINED in Layer 0 but USED in Layer 1
 
 BREAKDOWN BY LAYER:
 -------------------
-Layer 0 (MetaMetaMeta, ml=3):
-  - MetaTypes: 3 (mnt, mt, mlt)
-  - MetaRelations: 3 (mr, mrs, rp)
-  - Relations: 7 (type_rel, ml_rel, sig_rel, st_rel, tt_rel, nml_rel, rpr)
-  - Signatures: 7 (a2at, a2mlt, mlt2mlt, mrs2mt, mnt2mnt, mr2mrs, rs2rp)
-  - Relation Properties: 0
-  - MetaLevel Nodes: 5 (ml0, ml1, ml2, ml3, mlN) [actually ml=2]
-  SUBTOTAL: 25 nodes
+Layer 0 (MetaMetaMeta - contains nodes from ml=N, ml=3, and ml=2):
+
+  By MetaLevel:
+    ml=N (1 node):
+      - mnt (metaNType)
+
+    ml=3 (18 nodes):
+      - MetaTypes: 2 (mt, mlt is ml=2)
+      - MetaRelations: 3 (mr, mrs, rp)
+      - Relations: 7 (type_rel, ml_rel, sig_rel, st_rel, tt_rel, nml_rel, rpr)
+      - Signatures: 7 (a2at, a2mlt, mlt2mlt, mrs2mt, mnt2mnt, mr2mrs, rs2rp)
+
+    ml=2 (12 nodes - the "3+4+5" in red/pink containers):
+      - MetaTypes: 1 (mlt)
+      - MetaLevel Nodes: 5 (ml0, ml1, ml2, ml3, mlN)
+      - Relation Properties: 2 (man, uni)
+      - Layer 1 Signatures: 4 (c2c, rs2c, r2r, mr2mr) - defined here, used in L1
+
+  By Category:
+    - MetaTypes: 3 (mnt@ml=N, mt@ml=3, mlt@ml=2)
+    - MetaRelations: 3 (mr, mrs, rp @ml=3)
+    - Relations: 7 @ml=3
+    - Signatures: 11 total (7@ml=3 + 4@ml=2 for Layer 1)
+    - Relation Properties: 2 (man, uni @ml=2)
+    - MetaLevel Nodes: 5 @ml=2
+
+  SUBTOTAL: 31 nodes (1@ml=N + 18@ml=3 + 12@ml=2)
 
 Layer 1 Class-Inheritance (ml=2):
   - Types: 3 (class, rel, rs)
   - Relations: 5 (tc, sc, inh, supc, ith)
-  - Signatures: 4 (c2c, rs2c, r2r, mr2mr)
-  - Relation Properties: 2 (man, uni)
-  SUBTOTAL: 14 nodes
+  - Signatures: 0 (c2c, rs2c, r2r, mr2mr are DEFINED in Layer 0, not Layer 1)
+  - Relation Properties: 0 (man, uni are in Layer 0, not Layer 1)
+  SUBTOTAL: 8 nodes (signatures defined in L0, used here)
 
 Layer 1 Persistence-Structure (ml=2):
   - Types: 4 (lay, pac, sh, vn)
@@ -49,7 +90,15 @@ Layer 2 Grounding (ml=2 & ml=1):
   - Grounding Nodes (ml=1): 58
   SUBTOTAL: 63 nodes
 
-GRAND TOTAL: 108 nodes (excluding containers)
+GRAND TOTAL: 106 nodes (excluding containers)
+  = Layer 0: 31 nodes (1@ml=N + 18@ml=3 + 12@ml=2)
+  + Layer 1 Class-Inheritance: 8 nodes (@ml=2) - uses 4 sigs from L0
+  + Layer 1 Persistence: 4 nodes (@ml=2)
+  + Layer 2 Grounding: 63 nodes (5@ml=2 + 58@ml=1)
+
+KEY INSIGHT: Layer 1 Class-Inheritance signatures (c2c, rs2c, r2r, mr2mr) are
+DEFINED in Layer 0 but USED/APPLIED in Layer 1. This is why they're at ml=2 but
+count toward Layer 0's node total.
 
 CHANGE LOG:
 -----------
@@ -71,19 +120,25 @@ Version 1:
 - 55 grounding nodes
 - 6 orphaned nodes identified
 
-NODES BY PACKAGE/CONTAINER:
----------------------------
-Package ID                      | Node Count | Primary Contents
-------------------------------- | ---------- | ----------------
-y8TMbiYartTCWvdmmpqS-10        |     5      | mnt, mt, nml_rel, sig3, sig6
-4rcjDRaJ5Oi-6SsU8W6B-1         |     7      | ml_rel, sig2, sig4, ml0, ml1, ml2, ml3, mlN
-y8TMbiYartTCWvdmmpqS-112       |     5      | type_rel, sig1, rp, man, uni, rpr, rs2rp
-y8TMbiYartTCWvdmmpqS-116       |     6      | st_rel, tt_rel, mrs, c2c, rs2c, mr2mr
-y8TMbiYartTCWvdmmpqS-117       |     5      | mr, sig5, sig_rel, tc, sc
-y8TMbiYartTCWvdmmpqS-296       |     1      | class
-y8TMbiYartTCWvdmmpqS-307       |     2      | rel, rs
-y8TMbiYartTCWvdmmpqS-309       |     3      | inh, supc, ith
-[Grounding layer]              |    59      | All ml=1 grounding nodes
+NODES BY PACKAGE/CONTAINER (Layer 0 only):
+-------------------------------------------
+Package ID                      | Node Count | Primary Contents                              | ml=2 in L0
+------------------------------- | ---------- | --------------------------------------------  | ------------
+y8TMbiYartTCWvdmmpqS-10 (gray) |     6      | mnt, mt, mlt, nml_rel, sig3, sig6            | 1: mlt
+4rcjDRaJ5Oi-6SsU8W6B-1 (pink)  |     8      | ml_rel, sig2, sig4, ml0, ml1, ml2, ml3, mlN  | 5: ml0-mlN
+y8TMbiYartTCWvdmmpqS-112 (pink)|     7      | type_rel, sig1, rp, man, uni, rpr, rs2rp     | 2: man, uni
+y8TMbiYartTCWvdmmpqS-116 (blue)|     6      | st_rel, tt_rel, mrs, c2c, rs2c, mr2mr        | 3: c2c,rs2c,mr2mr
+y8TMbiYartTCWvdmmpqS-117 (blue)|     3      | mr, sig5, sig_rel                            | 0
+y8TMbiYartTCWvdmmpqS-309 (beige)|    4      | inh, supc, ith, r2r (L1 rels + L0 sig!)     | 1: r2r
+                                |            |                                               |
+TOTAL Layer 0 nodes in packages above: 31 nodes (6+8+7+6+3+4 = 34 overlapping, 31 unique)
+Layer 0 ml=2 nodes total: 12 (1+5+2+3+0+1)
+
+Note: Some containers overlap. The "red backgrounded area" (pink + blue + beige containers)
+contains all 12 ml=2 nodes of Layer 0 (the "3+4+5" grouping):
+  - 3 nodes in y8TMbiYartTCWvdmmpqS-116: c2c, rs2c, mr2mr
+  - 4 nodes scattered: mlt, man, uni, r2r
+  - 5 nodes in 4rcjDRaJ5Oi-6SsU8W6B-1: ml0-mlN
 
 NODES BY VISIBILITY (SHAPE):
 -----------------------------
@@ -215,8 +270,17 @@ Hexagon         public+1                visible to following layer only
 Ellipse         private                 visible to this layer only
 
 ================================================================================
-NODE DEFINITIONS - LAYER 0 (ml=3)
+NODE DEFINITIONS - LAYER 0 (ml=N, ml=3, and ml=2)
 ================================================================================
+
+IMPORTANT: Layer 0 contains nodes from three different meta levels:
+  - ml=N: 1 node (mnt)
+  - ml=3: 18 nodes (majority of Layer 0)
+  - ml=2: 12 nodes (the "3+4+5" in pink/blue containers):
+      * 1: mlt (metaLevelType)
+      * 5: ml0, ml1, ml2, ml3, mlN (metalevel markers)
+      * 2: man, uni (relation properties)
+      * 4: c2c, rs2c, r2r, mr2mr (Layer 1 Class-Inheritance signatures)
 
 METATYPE NODES
 --------------
@@ -1082,11 +1146,12 @@ ID: y8TMbiYartTCWvdmmpqS-114
   Contains: Main node cluster
 
 ID: y8TMbiYartTCWvdmmpqS-10
-  Type: Central node container
+  Type: Central node container (gray - part of "red backgrounded area")
   Fill: light-dark(#BABABA,#616161)
   Stroke: none
   Geometry: (551.13, -176.13), Size: 369.75x369.88
-  Contains: mnt, mt, nml_rel, sig3, sig6
+  Contains: mnt, mt, mlt, nml_rel, sig3, sig6
+  Note: Contains 1 ml=2 Layer 0 node (mlt) + 1 ml=N node + 4 ml=3 nodes
 
 ID: y8TMbiYartTCWvdmmpqS-7
   Type: Inner core container
@@ -1103,18 +1168,20 @@ ID: 4rcjDRaJ5Oi-6SsU8W6B-4
   Contains: type_rel, sig1
 
 ID: 4rcjDRaJ5Oi-6SsU8W6B-1
-  Type: Signature container (pink)
+  Type: Signature container (pink - "red backgrounded area")
   Fill: #FFCCE6 (light pink)
   Stroke: none, dashed (dashPattern=8 8)
   Geometry: (484, -56), Size: 346x350
   Contains: ml_rel, sig2, sig4, ml0, ml1, ml2, ml3, mlN
+  Note: Contains 5 ml=2 nodes (ml0, ml1, ml2, ml3, mlN) that are part of Layer 0
 
 ID: y8TMbiYartTCWvdmmpqS-112
-  Type: Signature container (pink)
+  Type: Signature container (pink - "red backgrounded area")
   Fill: #FFCCE6 (light pink)
   Stroke: default, dashed (dashPattern=8 8), rotation=15
   Geometry: (507.58, -167), Size: 108.42x163.81
   Contains: type_rel, sig1, rp, man, uni, rpr, rs2rp
+  Note: Contains 2 ml=2 nodes (man, uni) that are part of Layer 0
 
 ID: y8TMbiYartTCWvdmmpqS-296
   Type: Type container (red border)
@@ -1124,18 +1191,20 @@ ID: y8TMbiYartTCWvdmmpqS-296
   Contains: class (and possibly mt)
 
 ID: y8TMbiYartTCWvdmmpqS-309
-  Type: Container (beige/light green)
+  Type: Container (beige/light green - part of "red backgrounded area")
   Fill: light-dark(#FEFFEF,#1D1D1D)
   Stroke: none, rotation=70
   Geometry: (944.65, -127.88), Size: 205.33x86.91
-  Contains: inh, supc, ith
+  Contains: inh, supc, ith (Layer 1 relations), r2r (Layer 0 signature!)
+  Note: Contains 1 ml=2 Layer 0 signature (r2r) + 3 ml=2 Layer 1 relations
 
 ID: y8TMbiYartTCWvdmmpqS-116
-  Type: Container (light blue)
+  Type: Container (light blue - part of "red backgrounded area")
   Fill: #dae8fc (light blue)
   Stroke: none, rotation=75
   Geometry: (853.2, -99.47), Size: 171.75x114.3
   Contains: st_rel, tt_rel, mrs, c2c, rs2c, mr2mr
+  Note: Contains 3 ml=2 Layer 0 signatures (c2c, rs2c, mr2mr) + 3 ml=3 Layer 0 nodes
 
 ID: y8TMbiYartTCWvdmmpqS-117
   Type: Container (light blue)
